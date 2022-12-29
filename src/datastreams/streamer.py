@@ -15,14 +15,14 @@ from subgrounds.subgraph import SyntheticField
 
 @dataclass
 class Streamer:
-    '''
+    """
     Wrapper/Helper class built ontop of Subgrounds that allows user to easily access the subgraph schema and query the subgraph for all possible queries.
 
     # There are three components for the Subgrounds pipeline:
     # 1) Load Subgrounds - The main entry point for the pipeline, Subgrounds is used to query the subgraph and load the data into dataframes.
     # 2) Load Subgraph -  Load the schema data from a graphql endpoint. Specifically the schema data pertaining to `Query`. 
     # 3) Define Query Path - The query path is defined automatically to run every possible query on the subgraph and returns a list of dataframes.
-    '''
+    """
     sub: Subgrounds
     endpoint: str
     subgraph: Subgraph
@@ -30,9 +30,9 @@ class Streamer:
     data_list = []
 
     def runStreamer(self):
-        '''
+        """
         Use runStreamer() get all queryable fields from a subgraph. Streamer will run every possible query on the subgraph and return a list of dataframes.
-        '''
+        """
     # 1) get schema list 
         schema_list = self.getSubgraphSchema(self.subgraph)
     # 2) get schema query field list
@@ -98,7 +98,7 @@ class Streamer:
 
 
     def getFieldPath(self, subgraph: Subgraph, field: str,  operation: str ='Query') -> FieldPath:
-        '''
+        """
         Use getFieldPath to get a FieldPath from a string.
 
         Args:
@@ -107,22 +107,22 @@ class Streamer:
             operation (str) = Enter one of the following - 'Query', 'Mutation', or 'Subscription'. Default is 'Query' because that is most commonly used.
         Returns:
             FieldPath = FieldPath object
-        '''
+        """
         return subgraph.__getattribute__(operation).__getattribute__(field)
 
     def getSubgraphSchema(self, subgraph: Subgraph) -> list[str]:
-        '''
+        """
         Use getSubgraphSchema to fetch a schema list from a subgraph object.
 
         Args:
             subgraph (Subgraph) = Subgraph object with a loaded graphql endpoint
         Returns:
             list[str] = schema objects list from subgraph
-        '''
+        """
         return list(name for name, type_ in subgraph._schema.type_map.items() if type_.is_object)
 
     def getSchemaFields(self, subgraph: Subgraph, schema_object: str) -> list[str]:
-        '''
+        """
         Use getSubgraphField to get a list of SchemaFields from a subgraph.
 
         Args:
@@ -130,19 +130,19 @@ class Streamer:
             schema_object (str) = Enter the schama object string that you want to get all fields for
         Returns:
             list[str] = list of field strings from schema_object
-        '''
+        """
         return list(field.name for field in subgraph.__getattribute__(schema_object)._object.fields)
 
     def formatFieldStr(self, field: str) -> str:
         # if value does not end with a s and does not start and end with _, make the first non _ character in the string a capital letter
-        '''
+        """
         Use formatFieldStr to format the field string to be queryable. In order to make the field string queryable, the first non _ character must be capitalized.
 
         Args:
             field (str) = field string
         Returns:
             str = formatted field string
-        '''
+        """
         if not field.endswith('s') and not field.startswith('_'):
             field = field[0].upper() + field[1:]
         return field

@@ -6,7 +6,7 @@ from subgrounds.subgraph.subgraph import Subgraph
 
 @dataclass
 class DataStream:
-    '''
+    """
     Use DataStream to interface with the Streamer class. Future direction of the class is undecided. 
     The only benefit is abstracting away the execution layer from Streamer class. 
 
@@ -15,13 +15,13 @@ class DataStream:
 
     Additionally, Streamer should only interact with a single endpoint whereas DataStream can interact 
     multiple endpoints.
-    '''
+    """
 
     # Subgrounds is unique for every DataStream?
     def getDataStream(self, endpoint: str):
-        '''
+        """
         getDataStream is a firehose that returns all data from a subgraph endpoint.
-        '''
+        """
         # create new Subgrounds object
         sub = Subgrounds()
         # load subgraph data into Subgrounds
