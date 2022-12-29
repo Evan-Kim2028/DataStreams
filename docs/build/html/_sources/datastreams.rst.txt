@@ -1,7 +1,7 @@
 Documentation
 =============
 
-The ``DataStreamm`` class
+The ``DataStream`` class
 -----------------------------
 
 .. autoclass:: datastreams.datastream.DataStream
