@@ -1,0 +1,6 @@
+todo.txt
+
+
+# 12.28.22
+1) Test the package locally via pyscaffold - https://pyscaffold.org/en/stable/usage.html
+    1a) setup venv https://realpython.com/python-virtual-environments-a-primer/

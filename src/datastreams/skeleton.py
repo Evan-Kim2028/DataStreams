@@ -24,7 +24,9 @@ import argparse
 import logging
 import sys
 
+from datastreams.streamer import Streamer
 from datastreams import __version__
+from subgrounds.subgrounds import Subgrounds
 
 __author__ = "Evan-Kim2028"
 __copyright__ = "Evan-Kim2028"
@@ -38,6 +40,8 @@ _logger = logging.getLogger(__name__)
 # Python scripts/interactive interpreter, e.g. via
 # `from datastreams.skeleton import fib`,
 # when using this Python module as a library.
+
+# 12.28.22 - 
 
 
 def fib(n):
@@ -125,6 +129,25 @@ def main(args):
     _logger.debug("Starting crazy calculations...")
     print("The {}-th Fibonacci number is {}".format(args.n, fib(args.n)))
     _logger.info("Script ends here")
+
+
+    # Run a sample Streamer
+    hosted_query_ids = [
+                    'https://api.thegraph.com/subgraphs/name/cowprotocol/cow'
+                    'https://api.thegraph.com/subgraphs/name/cowprotocol/cow-gc'
+                    ]
+
+    sub_firehose_data = []
+    counter = 0
+    for endpoint in hosted_query_ids:
+        counter += 1
+        print(f'query {counter} for {endpoint}')
+        sub = Subgrounds()
+        subgraph = sub.load_subgraph(endpoint)
+        dataStreamer = Streamer(sub, endpoint, subgraph)
+        dataStreamer.runStreamer()
+        sub_firehose_data.append(dataStreamer)
+
 
 
 def run():

@@ -8,7 +8,7 @@
         :alt: ReadTheDocs
         :target: https://DataStreams.readthedocs.io/en/stable/
     .. image:: https://img.shields.io/coveralls/github/<USER>/DataStreams/main.svg
-        :alt: Coveralls
+        :alt: Coveralls/home/evan/Documents/github/DataStream/README.md
         :target: https://coveralls.io/r/<USER>/DataStreams
     .. image:: https://img.shields.io/pypi/v/DataStreams.svg
         :alt: PyPI-Server
@@ -34,16 +34,21 @@ DataStreams
 ===========
 
 
-    Add a short description here!
+DataStream a package that lets user build GraphQL DAG queries out of Subgraph data. 
 
 
-A longer description of your project goes here...
+
+It provides extended functionality on top of The Graph data access package [Subgrounds](https://github.com/Protean-Labs/subgrounds).
 
 
 .. _pyscaffold-notes:
 
-Note
-====
+Dependencies and Setup
+======================
+Since DataStream uses Subgrounds, Python 
 
-This project has been set up using PyScaffold 4.3.1. For details and usage
-information on PyScaffold see https://pyscaffold.org/.
+### Dependencies
+DataStream requires:
+* Python (>= 3.10)
+* Subgrounds (>= 1.0.3)
+* Pandas (>= 1.5.0)
