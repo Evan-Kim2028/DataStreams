@@ -9,10 +9,9 @@ from subgrounds.subgrounds import Subgrounds
 from subgrounds.subgraph.fieldpath import FieldPath
 from subgrounds.subgraph import SyntheticField
 
-
-pd.set_option('display.max_columns', None)
-pd.set_option('display.expand_frame_repr', False)
-pd.set_option('max_colwidth', None)
+# pd.set_option('display.max_columns', None)
+# pd.set_option('display.expand_frame_repr', False)
+# pd.set_option('max_colwidth', None)
 
 @dataclass
 class Streamer:
