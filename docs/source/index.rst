@@ -13,8 +13,6 @@ Welcome to DataStreams's documentation!
    intro
    datastreams
    examples
-   modules
-   setup
 
 
 Indices and tables

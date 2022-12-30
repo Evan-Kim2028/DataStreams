@@ -45,10 +45,9 @@ It provides extended functionality on top of The Graph data access package [Subg
 
 Dependencies and Setup
 ======================
-Since DataStream uses Subgrounds, Python 
+Since DataStream uses Subgrounds, Python 3.10 is required.
 
-### Dependencies
-DataStream requires:
+DataStream also requires:
 * Python (>= 3.10)
 * Subgrounds (>= 1.0.3)
 * Pandas (>= 1.5.0)
