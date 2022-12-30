@@ -26,12 +26,13 @@ class Streamer:
     sub: Subgrounds
     endpoint: str
     subgraph: Subgraph
-    # TODO - turn this into a dictionary with respective query field name for easier lookup. THis would be a nice to have, but the names are also saved in the directory too already so not sure this is necessary.
+    
     data_list = []
 
-    def runStreamer(self):
+    def runStreamer(self, query_size: int =5):
         """
         Use runStreamer() get all queryable fields from a subgraph. Streamer will run every possible query on the subgraph and return a list of dataframes.
+        Set the query_size to the number of results you want to return for each query. Default is 5.
         """
     # 1) get schema list 
         schema_list = self.getSubgraphSchema(self.subgraph)
@@ -73,7 +74,7 @@ class Streamer:
             field_list = self.getSchemaFields(self.subgraph, sorted_subgraph_schema_query_list[i])
             field_path = self.getFieldPath(self.subgraph, sorted_subgraph_query_field_list[i])
             # end query timer
-            field_path_params = field_path(first=5)
+            field_path_params = field_path(first=query_size) # params refers to the the GraphQL query search parameters such as first, last, descending, etc
             
             df = self.sub.query_df(field_path_params, field_list)
             

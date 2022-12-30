@@ -15,7 +15,7 @@ for endpoint in hosted_query_ids:
     sub = Subgrounds()
     subgraph = sub.load_subgraph(endpoint)
     dataStreamer = Streamer(sub, endpoint, subgraph)
-    dataStreamer.runStreamer()
+    dataStreamer.runStreamer(5)
     sub_firehose_data.append(dataStreamer)
 
 

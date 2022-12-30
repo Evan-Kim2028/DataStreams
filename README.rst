@@ -24,3 +24,8 @@ DataStream also requires:
 * Python (>= 3.10)
 * Subgrounds (>= 1.0.3)
 * Pandas (>= 1.5.0)
+
+Installation
+============
+Install via `pip install git+https://github.com/Evan-Kim2028/DataStreams.git`
+    

@@ -18,9 +18,10 @@ class DataStream:
     """
 
     # Subgrounds is unique for every DataStream?
-    def getDataStream(self, endpoint: str):
+    def getDataStream(self, endpoint: str, query_size = 5):
         """
         getDataStream is a firehose that returns all data from a subgraph endpoint.
+        Should query_size, a graphQl parameter be contained in this function? Or moved somewhere else
         """
         # create new Subgrounds object
         sub = Subgrounds()
@@ -31,4 +32,4 @@ class DataStream:
         streamer = Streamer(sub, endpoint, subgraph)
 
         # run Streamer. By default runStreamer is a firehose.
-        streamer.runStreamer()
+        streamer.runStreamer(query_size)
