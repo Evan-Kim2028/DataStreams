@@ -33,12 +33,7 @@
 DataStreams
 ===========
 
-
-DataStream a package that lets user build GraphQL DAG queries out of Subgraph data. 
-
-
-
-It provides extended functionality on top of The Graph data access package [Subgrounds](https://github.com/Protean-Labs/subgrounds).
+DataStream a package that lets user build GraphQL DAG queries out of Subgraph data. It provides extended functionality on top of The Graph data access package [Subgrounds](https://github.com/Protean-Labs/subgrounds).
 
 
 .. _pyscaffold-notes:
