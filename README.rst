@@ -1,15 +1,11 @@
 .. These are examples of badges you might want to add to your README:
    please update the URLs accordingly
 
-    .. image:: https://api.cirrus-ci.com/github/<USER>/DataStreams.svg?branch=main
-        :alt: Built Status
-        :target: https://cirrus-ci.com/github/<USER>/DataStreams
-    .. image:: https://readthedocs.org/projects/DataStreams/badge/?version=latest
-        :alt: ReadTheDocs
-        :target: https://DataStreams.readthedocs.io/en/stable/
-    .. image:: https://img.shields.io/coveralls/github/<USER>/DataStreams/main.svg
-        :alt: Coveralls/home/evan/Documents/github/DataStream/README.md
-        :target: https://coveralls.io/r/<USER>/DataStreams
+
+.. image:: https://readthedocs.org/projects/DataStreams/badge/?version=latest
+    :alt: ReadTheDocs
+    :target: https://datastreams-subgraph.readthedocs.io/en/stable/
+
     .. image:: https://img.shields.io/pypi/v/DataStreams.svg
         :alt: PyPI-Server
         :target: https://pypi.org/project/DataStreams/
