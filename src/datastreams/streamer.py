@@ -95,6 +95,7 @@ class Streamer:
         runStreamer() gets all queryable fields from a subgraph from every schema. The list of dataframes is stored in the Streamer data_list.
         Set the query_size to the number of results you want to return for each query. Default is 5. There are currently
         four steps in runStreamer():
+        
         #. get schema list 
         #. get schema query field list
         #. filter, format, and sort. End result is subgraph_query_field_list -> sorted_subgraph_field_query_list steps
