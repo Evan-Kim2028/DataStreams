@@ -61,6 +61,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.getSubgraphSchema"><code class="docutils literal notranslate"><span class="pre">Streamer.getSubgraphSchema()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.runStreamer"><code class="docutils literal notranslate"><span class="pre">Streamer.runStreamer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.schema_list"><code class="docutils literal notranslate"><span class="pre">Streamer.schema_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.setupStreamer"><code class="docutils literal notranslate"><span class="pre">Streamer.setupStreamer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.sub"><code class="docutils literal notranslate"><span class="pre">Streamer.sub</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.subgraph"><code class="docutils literal notranslate"><span class="pre">Streamer.subgraph</span></code></a></li>
 </ul>
@@ -135,22 +136,22 @@ Should query_size, a graphQl parameter be contained in this function? Or moved s
 <h2>The <code class="docutils literal notranslate"><span class="pre">Streamer</span></code> class<a class="headerlink" href="#the-streamer-class" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datastreams.streamer.</span></span><span class="sig-name descname"><span class="pre">Streamer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sub:</span> <span class="pre">~subgrounds.subgrounds.Subgrounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subgraph:</span> <span class="pre">~subgrounds.subgraph.subgraph.Subgraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datastreams.streamer.</span></span><span class="sig-name descname"><span class="pre">Streamer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Subgraph</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Subgrounds</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sub</strong> (<em>Subgrounds</em>) – Subgrounds object</p></li>
-<li><p><strong>endpoint</strong> (<em>str</em>) – graphql endpoint</p></li>
-<li><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object</p></li>
-<li><p><strong>data_list</strong> (<em>list</em>) – list of dataframes. default is []</p></li>
-<li><p><strong>schema_list</strong> (<em>list</em>) – list of schema objects. default is []</p></li>
+<li><p><strong>sub</strong> (<em>Subgrounds</em>) – Subgrounds object. Default is <cite>None</cite></p></li>
+<li><p><strong>endpoint</strong> (<em>str</em>) – graphql endpoint. Default is <cite>None</cite></p></li>
+<li><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object. Default is <cite>None</cite></p></li>
+<li><p><strong>data_list</strong> (<em>list</em>) – list of dataframes. Default is <cite>None</cite></p></li>
+<li><p><strong>schema_list</strong> (<em>list</em>) – list of schema objects. Default is <cite>None</cite></p></li>
 </ul>
 </dd>
 </dl>
 <p>Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. 
 Streamer makes it easier to define query paths by introducing helper functions that expose commonly used 
-Subgrounds functions.</p>
+Subgrounds functions. Each Streamer relates  to a single subgraph.</p>
 <p>Introducing these helper functions allows Streamer to queue up multiple queries of different parts of a schema at once. 
 The data flow can be described as follows:</p>
 <ol class="arabic simple">
@@ -160,12 +161,12 @@ The data flow can be described as follows:</p>
 </ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.data_list">
-<span class="sig-name descname"><span class="pre">data_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.data_list" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">data_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.data_list" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.endpoint">
-<span class="sig-name descname"><span class="pre">endpoint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.endpoint" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">endpoint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.endpoint" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -187,11 +188,10 @@ it would be worthwhile to add more functionality to make this method more robust
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.getFieldPath">
-<span class="sig-name descname"><span class="pre">getFieldPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Subgraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Query'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FieldPath</span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getFieldPath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getFieldPath" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getFieldPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Query'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FieldPath</span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getFieldPath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getFieldPath" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object with a loaded graphql endpoint</p></li>
 <li><p><strong>field</strong> (<em>str</em>) – Enter the string that will be converted to a FieldPath</p></li>
 <li><p><strong>operation</strong> (<em>str</em>) – Enter one of the following - ‘Query’, ‘Mutation’, or ‘Subscription’. Default is ‘Query’ because that is most commonly used.</p></li>
 </ul>
@@ -205,11 +205,10 @@ it would be worthwhile to add more functionality to make this method more robust
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.getSchemaFields">
-<span class="sig-name descname"><span class="pre">getSchemaFields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Subgraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSchemaFields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSchemaFields" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getSchemaFields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSchemaFields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSchemaFields" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object with a loaded graphql endpoint</p></li>
 <li><p><strong>schema_object</strong> (<em>str</em>) – Schema object name to get fields list from</p></li>
 <li><p><strong>operation</strong> (<em>str</em>) – Enter one of the following - ‘Query’, ‘Mutation’, or ‘Subscription’. Default is ‘Query’ because that is most commonly used.</p></li>
 </ul>
@@ -223,13 +222,10 @@ it would be worthwhile to add more functionality to make this method more robust
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.getSubgraphSchema">
-<span class="sig-name descname"><span class="pre">getSubgraphSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Subgraph</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSubgraphSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSubgraphSchema" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getSubgraphSchema</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSubgraphSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSubgraphSchema" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object with a loaded Subgraph endpoint</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>schema list from a Subgraph</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>schema list from a Subgraph</p>
 </dd>
 </dl>
 <p>getSubgraphSchema gets the schema list from a Subgraph.</p>
@@ -257,17 +253,24 @@ four steps in runStreamer():</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.schema_list">
-<span class="sig-name descname"><span class="pre">schema_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.schema_list" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">schema_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.schema_list" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.setupStreamer">
+<span class="sig-name descname"><span class="pre">setupStreamer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.setupStreamer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.setupStreamer" title="Permalink to this definition"></a></dt>
+<dd><p>run this function when Streamer is initialized. This function initializes a Subgrounds object and loads a Subgraph object into Subgrounds.
+Since this is needed before doing anything with Subgrounds, this is done automatically at start to remove additional dependencies from using Streamer.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.sub">
-<span class="sig-name descname"><span class="pre">sub</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Subgrounds</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.sub" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sub</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Subgrounds</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.sub" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.subgraph">
-<span class="sig-name descname"><span class="pre">subgraph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Subgraph</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.subgraph" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">subgraph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Subgraph</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.subgraph" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

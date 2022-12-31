@@ -1,20 +1,18 @@
 from datastreams.streamer import Streamer
-from subgrounds.subgrounds import Subgrounds
 
 # Run Streamer over a list of subgraph IDs
-hosted_query_ids = [
-                'https://api.thegraph.com/subgraphs/name/cowprotocol/cow',
-                'https://api.thegraph.com/subgraphs/name/cowprotocol/cow-gc'
-                ]
+endpoint = 'https://api.thegraph.com/subgraphs/name/cowprotocol/cow'
 
-sub_firehose_data = []
-counter = 0
-for endpoint in hosted_query_ids:
-    counter += 1
-    print(f'query {counter} for {endpoint}')
-    sub = Subgrounds()
-    subgraph = sub.load_subgraph(endpoint)
-    dataStreamer = Streamer(sub, endpoint, subgraph)
-    dataStreamer.runStreamer(5)
-    sub_firehose_data.append(dataStreamer)
-    
+
+
+
+
+ds = Streamer(endpoint)
+
+print(f' the endpoint is {ds.endpoint}')
+
+print(f'the schema list is {ds.schema_list}')
+
+ds.runStreamer()
+
+print("script is finished")

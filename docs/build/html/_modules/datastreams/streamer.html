@@ -81,16 +81,16 @@
 <div class="viewcode-block" id="Streamer"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Streamer</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param Subgrounds sub: Subgrounds object</span>
-<span class="sd">    :param str endpoint: graphql endpoint</span>
-<span class="sd">    :param Subgraph subgraph: Subgraph object</span>
-<span class="sd">    :param list data_list: list of dataframes. default is []</span>
-<span class="sd">    :param list schema_list: list of schema objects. default is []</span>
+<span class="sd">    :param Subgrounds sub: Subgrounds object. Default is `None`</span>
+<span class="sd">    :param str endpoint: graphql endpoint. Default is `None`</span>
+<span class="sd">    :param Subgraph subgraph: Subgraph object. Default is `None`</span>
+<span class="sd">    :param list data_list: list of dataframes. Default is `None`</span>
+<span class="sd">    :param list schema_list: list of schema objects. Default is `None`</span>
 
 
 <span class="sd">    Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. </span>
 <span class="sd">    Streamer makes it easier to define query paths by introducing helper functions that expose commonly used </span>
-<span class="sd">    Subgrounds functions. </span>
+<span class="sd">    Subgrounds functions. Each Streamer relates  to a single subgraph.</span>
 <span class="sd">    </span>
 <span class="sd">    Introducing these helper functions allows Streamer to queue up multiple queries of different parts of a schema at once. </span>
 <span class="sd">    The data flow can be described as follows:</span>
@@ -100,16 +100,29 @@
 <span class="sd">    #. The query path is defined automatically to run every possible query on the subgraph and returns a list of dataframes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">sub</span><span class="p">:</span> <span class="n">Subgrounds</span>
-    <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">subgraph</span><span class="p">:</span> <span class="n">Subgraph</span>
-    <span class="n">data_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span> 
-    <span class="n">schema_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span> 
+    <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">subgraph</span><span class="p">:</span> <span class="n">Subgraph</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sub</span><span class="p">:</span> <span class="n">Subgrounds</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">data_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">schema_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
+    
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># Perform startup tasks here</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupStreamer</span><span class="p">()</span>
 
-
-<div class="viewcode-block" id="Streamer.getFieldPath"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getFieldPath">[docs]</a>    <span class="k">def</span> <span class="nf">getFieldPath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subgraph</span><span class="p">:</span> <span class="n">Subgraph</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s1">&#39;Query&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldPath</span><span class="p">:</span>
+<div class="viewcode-block" id="Streamer.setupStreamer"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.setupStreamer">[docs]</a>    <span class="k">def</span> <span class="nf">setupStreamer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :param Subgraph subgraph: Subgraph object with a loaded graphql endpoint</span>
+<span class="sd">        run this function when Streamer is initialized. This function initializes a Subgrounds object and loads a Subgraph object into Subgrounds.</span>
+<span class="sd">        Since this is needed before doing anything with Subgrounds, this is done automatically at start to remove additional dependencies from using Streamer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sub</span> <span class="o">=</span> <span class="n">Subgrounds</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="o">.</span><span class="n">load_subgraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schema_list</span> <span class="o">=</span> <span class="p">[]</span></div>
+        
+
+<div class="viewcode-block" id="Streamer.getFieldPath"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getFieldPath">[docs]</a>    <span class="k">def</span> <span class="nf">getFieldPath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s1">&#39;Query&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldPath</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param str field: Enter the string that will be converted to a FieldPath</span>
 <span class="sd">        :param str operation: Enter one of the following - &#39;Query&#39;, &#39;Mutation&#39;, or &#39;Subscription&#39;. Default is &#39;Query&#39; because that is most commonly used. </span>
 <span class="sd">        :return: FieldPath object</span>
@@ -117,21 +130,19 @@
 
 <span class="sd">        getFieldPath converts a string to a FieldPath object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">subgraph</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">field</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">field</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Streamer.getSubgraphSchema"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getSubgraphSchema">[docs]</a>    <span class="k">def</span> <span class="nf">getSubgraphSchema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subgraph</span><span class="p">:</span> <span class="n">Subgraph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="Streamer.getSubgraphSchema"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getSubgraphSchema">[docs]</a>    <span class="k">def</span> <span class="nf">getSubgraphSchema</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :param Subgraph subgraph: Subgraph object with a loaded Subgraph endpoint</span>
 <span class="sd">        :return: schema list from a Subgraph</span>
 
 
 <span class="sd">        getSubgraphSchema gets the schema list from a Subgraph.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">type_</span> <span class="ow">in</span> <span class="n">subgraph</span><span class="o">.</span><span class="n">_schema</span><span class="o">.</span><span class="n">type_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">type_</span><span class="o">.</span><span class="n">is_object</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">type_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="o">.</span><span class="n">_schema</span><span class="o">.</span><span class="n">type_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">type_</span><span class="o">.</span><span class="n">is_object</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Streamer.getSchemaFields"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getSchemaFields">[docs]</a>    <span class="k">def</span> <span class="nf">getSchemaFields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subgraph</span><span class="p">:</span> <span class="n">Subgraph</span><span class="p">,</span> <span class="n">schema_object</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="Streamer.getSchemaFields"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getSchemaFields">[docs]</a>    <span class="k">def</span> <span class="nf">getSchemaFields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_object</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :param Subgraph subgraph: Subgraph object with a loaded graphql endpoint</span>
 <span class="sd">        :param str schema_object: Schema object name to get fields list from</span>
 <span class="sd">        :param str operation: Enter one of the following - &#39;Query&#39;, &#39;Mutation&#39;, or &#39;Subscription&#39;. Default is &#39;Query&#39; because that is most commonly used.</span>
 <span class="sd">        :return: strings field list from a Subgraph schema</span>
@@ -139,7 +150,7 @@
 
 <span class="sd">        getSubgraphField gets a fields list from a subgraph schema.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">subgraph</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">schema_object</span><span class="p">)</span><span class="o">.</span><span class="n">_object</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">schema_object</span><span class="p">)</span><span class="o">.</span><span class="n">_object</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Streamer.formatFieldStr"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.formatFieldStr">[docs]</a>    <span class="k">def</span> <span class="nf">formatFieldStr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -175,10 +186,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="c1"># 1) get schema list </span>
-        <span class="n">schema_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSubgraphSchema</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="p">)</span>
+        <span class="n">schema_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSubgraphSchema</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schema_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">schema_list</span><span class="p">])</span>
 
     <span class="c1"># 2) get schema query field list</span>
-        <span class="n">query_field_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSchemaFields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="p">,</span> <span class="n">schema_list</span><span class="p">[</span><span class="n">schema_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;Query&#39;</span><span class="p">)])</span>
+        <span class="n">query_field_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSchemaFields</span><span class="p">(</span><span class="n">schema_list</span><span class="p">[</span><span class="n">schema_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;Query&#39;</span><span class="p">)])</span>
 
     <span class="c1"># 2) filter, format, and sort. End result is subgraph_query_field_list -&gt; sorted_subgraph_field_query_list steps</span>
         <span class="n">filtered_schema_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">schema_list</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;Query&#39;</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;Subscription&#39;</span><span class="p">]</span>
@@ -206,13 +218,14 @@
         <span class="n">subgraph_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">outer_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
         <span class="c1"># automate querying subgraph data for each &quot;queryable&quot; subgraph schema object</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sorted_subgraph_query_field_list</span><span class="p">)):</span>
             <span class="c1"># start query timer</span>
             <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
             <span class="c1"># get query field path</span>
-            <span class="n">field_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSchemaFields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="p">,</span> <span class="n">sorted_subgraph_schema_query_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">field_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFieldPath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="p">,</span> <span class="n">sorted_subgraph_query_field_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">field_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSchemaFields</span><span class="p">(</span><span class="n">sorted_subgraph_schema_query_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">field_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFieldPath</span><span class="p">(</span><span class="n">sorted_subgraph_query_field_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="c1"># end query timer</span>
             <span class="n">field_path_params</span> <span class="o">=</span> <span class="n">field_path</span><span class="p">(</span><span class="n">first</span><span class="o">=</span><span class="n">query_size</span><span class="p">)</span> <span class="c1"># params refers to the the GraphQL query search parameters such as first, last, descending, etc</span>
             

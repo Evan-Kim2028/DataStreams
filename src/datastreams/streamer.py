@@ -11,16 +11,16 @@ from subgrounds.subgraph.fieldpath import FieldPath
 @dataclass
 class Streamer:
     """
-    :param Subgrounds sub: Subgrounds object
-    :param str endpoint: graphql endpoint
-    :param Subgraph subgraph: Subgraph object
-    :param list data_list: list of dataframes. default is []
-    :param list schema_list: list of schema objects. default is []
+    :param Subgrounds sub: Subgrounds object. Default is `None`
+    :param str endpoint: graphql endpoint. Default is `None`
+    :param Subgraph subgraph: Subgraph object. Default is `None`
+    :param list data_list: list of dataframes. Default is `None`
+    :param list schema_list: list of schema objects. Default is `None`
 
 
     Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. 
     Streamer makes it easier to define query paths by introducing helper functions that expose commonly used 
-    Subgrounds functions. 
+    Subgrounds functions. Each Streamer relates  to a single subgraph.
     
     Introducing these helper functions allows Streamer to queue up multiple queries of different parts of a schema at once. 
     The data flow can be described as follows:
@@ -30,16 +30,29 @@ class Streamer:
     #. The query path is defined automatically to run every possible query on the subgraph and returns a list of dataframes.
     """
 
-    sub: Subgrounds
-    endpoint: str
-    subgraph: Subgraph
-    data_list: list = field(default_factory=list) 
-    schema_list: list = field(default_factory=list) 
+    endpoint: str = None
+    subgraph: Subgraph = None
+    sub: Subgrounds = None
+    data_list: list = None
+    schema_list: list = None
+    
+    def __post_init__(self):
+    # Perform startup tasks here
+        self.setupStreamer()
 
-
-    def getFieldPath(self, subgraph: Subgraph, field: str,  operation: str ='Query') -> FieldPath:
+    def setupStreamer(self):
         """
-        :param Subgraph subgraph: Subgraph object with a loaded graphql endpoint
+        run this function when Streamer is initialized. This function initializes a Subgrounds object and loads a Subgraph object into Subgrounds.
+        Since this is needed before doing anything with Subgrounds, this is done automatically at start to remove additional dependencies from using Streamer.
+        """
+        self.sub = Subgrounds()
+        self.subgraph = self.sub.load_subgraph(self.endpoint)
+        self.data_list = []
+        self.schema_list = []
+        
+
+    def getFieldPath(self, field: str,  operation: str ='Query') -> FieldPath:
+        """
         :param str field: Enter the string that will be converted to a FieldPath
         :param str operation: Enter one of the following - 'Query', 'Mutation', or 'Subscription'. Default is 'Query' because that is most commonly used. 
         :return: FieldPath object
@@ -47,21 +60,19 @@ class Streamer:
 
         getFieldPath converts a string to a FieldPath object.
         """
-        return subgraph.__getattribute__(operation).__getattribute__(field)
+        return self.subgraph.__getattribute__(operation).__getattribute__(field)
 
-    def getSubgraphSchema(self, subgraph: Subgraph) -> list[str]:
+    def getSubgraphSchema(self) -> list[str]:
         """
-        :param Subgraph subgraph: Subgraph object with a loaded Subgraph endpoint
         :return: schema list from a Subgraph
 
 
         getSubgraphSchema gets the schema list from a Subgraph.
         """
-        return list(name for name, type_ in subgraph._schema.type_map.items() if type_.is_object)
+        return list(name for name, type_ in self.subgraph._schema.type_map.items() if type_.is_object)
 
-    def getSchemaFields(self, subgraph: Subgraph, schema_object: str) -> list[str]:
+    def getSchemaFields(self, schema_object: str) -> list[str]:
         """
-        :param Subgraph subgraph: Subgraph object with a loaded graphql endpoint
         :param str schema_object: Schema object name to get fields list from
         :param str operation: Enter one of the following - 'Query', 'Mutation', or 'Subscription'. Default is 'Query' because that is most commonly used.
         :return: strings field list from a Subgraph schema
@@ -69,7 +80,7 @@ class Streamer:
 
         getSubgraphField gets a fields list from a subgraph schema.
         """
-        return list(field.name for field in subgraph.__getattribute__(schema_object)._object.fields)
+        return list(field.name for field in self.subgraph.__getattribute__(schema_object)._object.fields)
 
     def formatFieldStr(self, field: str) -> str:
         """
@@ -105,10 +116,11 @@ class Streamer:
         """
 
     # 1) get schema list 
-        schema_list = self.getSubgraphSchema(self.subgraph)
+        schema_list = self.getSubgraphSchema()
+        self.schema_list.append([value for value in schema_list])
 
     # 2) get schema query field list
-        query_field_list = self.getSchemaFields(self.subgraph, schema_list[schema_list.index('Query')])
+        query_field_list = self.getSchemaFields(schema_list[schema_list.index('Query')])
 
     # 2) filter, format, and sort. End result is subgraph_query_field_list -> sorted_subgraph_field_query_list steps
         filtered_schema_list = [x for x in schema_list if not x.endswith('_') and x != 'Query' and x != 'Subscription']
@@ -136,13 +148,14 @@ class Streamer:
         subgraph_name = self.endpoint.split('/')[-1]
 
         outer_start = time.time()
+
         # automate querying subgraph data for each "queryable" subgraph schema object
         for i in range(len(sorted_subgraph_query_field_list)):
             # start query timer
             start = time.time()
             # get query field path
-            field_list = self.getSchemaFields(self.subgraph, sorted_subgraph_schema_query_list[i])
-            field_path = self.getFieldPath(self.subgraph, sorted_subgraph_query_field_list[i])
+            field_list = self.getSchemaFields(sorted_subgraph_schema_query_list[i])
+            field_path = self.getFieldPath(sorted_subgraph_query_field_list[i])
             # end query timer
             field_path_params = field_path(first=query_size) # params refers to the the GraphQL query search parameters such as first, last, descending, etc
             
