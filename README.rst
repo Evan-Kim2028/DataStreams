@@ -31,6 +31,6 @@ Install via `pip install git+https://github.com/Evan-Kim2028/DataStreams.git`
     
 Documentation
 =============
-Find 'full documentation here'_.
+Find `full documentation here`_.
 
 .. _full documentation here: https://datastreams-subgraph.readthedocs.io/en/latest/
