@@ -9,10 +9,15 @@ endpoint = 'https://api.thegraph.com/subgraphs/name/cowprotocol/cow'
 
 ds = Streamer(endpoint)
 
-print(f' the endpoint is {ds.endpoint}')
+print(f' The endpoint is:\n {ds.endpoint}\n')
 
-print(f'the schema list is {ds.schema_list}')
+print(f'The schema list is initialized at startup and is:\n \n{ds.schema}\n')
 
-ds.runStreamer()
+# ds.runStreamer() # currently broken. being refactored 
+
+li_one, li_two = ds.filterSchema()
+
+print(f'The filtered schema list is:\n \n{li_one}\n')
+print(f'The filtered query list is:\n \n{li_two}\n')
 
 print("script is finished")

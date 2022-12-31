@@ -101,22 +101,24 @@ class Streamer:
         return field
 
 
-    def filterSchema(self):
+    def filterSchemaFields(self):
         """
         :return: list of schema objects and list of query fields
 
-        
-        filterSchema automatically filters the Schema fields for the Query fields and preprocesses for querying.
+
+        filterSchemaFields automatically filters the Schema fields for the Query fields and preprocesses for querying.
         """
         # get schema query field list
         query_field_list = self.getSchemaFields(self.schema[self.schema.index('Query')])
 
-     # 2) filter, format, and sort. End result is subgraph_query_field_list -> sorted_subgraph_field_query_list steps
         filtered_schema = [x for x in self.schema if not x.endswith('_') and x != 'Query' and x != 'Subscription']
-        # format query fields
+        # format query fields to strings
         fmt_query_field_list = [self.formatFieldStr(field) for field in query_field_list]
         # drop empty values if there are any. Empty fields will break the query.
         fmt_query_field_list = [field for field in fmt_query_field_list if field != '']
+
+        # THESE ARE THE OUTPUTS
+        # TODO - refactor the outputs more elegantly. It's not clear where they are going yet
 
         # make a query field list with queryable fields - these are plural values that end with 's'.
         subgraph_query_field_list = [field for field in fmt_query_field_list if field.endswith('s')]
@@ -141,7 +143,7 @@ class Streamer:
         TODO - break this function down into four sub functions? Probably a good idea.
         """
 
-# REFACTOR TO filterSchema() function
+# REFACTOR TO filterSchemaFields() function
     # # 2) get schema query field list
     #     query_field_list = self.getSchemaFields(self.schema[self.schema.index('Query')])
 
