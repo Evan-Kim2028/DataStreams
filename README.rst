@@ -6,7 +6,7 @@
 ===========
 DataStreams
 ===========
-DataStream a package that lets user build GraphQL DAG queries out of Subgraph data. 
+DataStream a Subgraph query utility package that allows users to execute more complex GraphQL queries. 
 It provides extended functionality on top of The Graph data access package `Subgrounds`_.
 
 .. _Subgrounds: https://github.com/Protean-Labs/subgrounds
@@ -29,3 +29,8 @@ Installation
 ============
 Install via `pip install git+https://github.com/Evan-Kim2028/DataStreams.git`
     
+Documentation
+=============
+Find 'full documentation here'_.
+
+.. _full documentation here: https://datastreams-subgraph.readthedocs.io/en/latest/
