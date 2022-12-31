@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation &mdash; DataStreams  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Intro" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> DataStreams
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Intro</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-datastreams">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-datastream-class">The <code class="docutils literal notranslate"><span class="pre">DataStream</span></code> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#datastreams.datastream.DataStream"><code class="docutils literal notranslate"><span class="pre">DataStream</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.datastream.DataStream.getDataStream"><code class="docutils literal notranslate"><span class="pre">DataStream.getDataStream()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-streamer-class">The <code class="docutils literal notranslate"><span class="pre">Streamer</span></code> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#datastreams.streamer.Streamer"><code class="docutils literal notranslate"><span class="pre">Streamer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.data_list"><code class="docutils literal notranslate"><span class="pre">Streamer.data_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.endpoint"><code class="docutils literal notranslate"><span class="pre">Streamer.endpoint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.formatFieldStr"><code class="docutils literal notranslate"><span class="pre">Streamer.formatFieldStr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.getFieldPath"><code class="docutils literal notranslate"><span class="pre">Streamer.getFieldPath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.getSchemaFields"><code class="docutils literal notranslate"><span class="pre">Streamer.getSchemaFields()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.getSubgraphSchema"><code class="docutils literal notranslate"><span class="pre">Streamer.getSubgraphSchema()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.runStreamer"><code class="docutils literal notranslate"><span class="pre">Streamer.runStreamer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.schema_list"><code class="docutils literal notranslate"><span class="pre">Streamer.schema_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.sub"><code class="docutils literal notranslate"><span class="pre">Streamer.sub</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.subgraph"><code class="docutils literal notranslate"><span class="pre">Streamer.subgraph</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DataStreams</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/datastreams.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h1>
+<section id="module-datastreams">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-datastreams" title="Permalink to this heading"></a></h2>
+</section>
+<section id="the-datastream-class">
+<h2>The <code class="docutils literal notranslate"><span class="pre">DataStream</span></code> class<a class="headerlink" href="#the-datastream-class" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="datastreams.datastream.DataStream">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datastreams.datastream.</span></span><span class="sig-name descname"><span class="pre">DataStream</span></span><a class="reference internal" href="_modules/datastreams/datastream.html#DataStream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.datastream.DataStream" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Use DataStream to interface with the Streamer class. Future direction of the class is undecided. 
+The only benefit is abstracting away the execution layer from Streamer class.</p>
+<p>Tentatively DataStream should store execution functionality whereas Streamer will store
+the subgraph interface functionality.</p>
+<p>Additionally, Streamer should only interact with a single endpoint whereas DataStream can interact 
+multiple endpoints.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datastreams.datastream.DataStream.getDataStream">
+<span class="sig-name descname"><span class="pre">getDataStream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/datastream.html#DataStream.getDataStream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.datastream.DataStream.getDataStream" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> (<em>str</em>) – graphql endpoint</p></li>
+<li><p><strong>query_size</strong> (<em>int</em>) – number of queries to run. Default is 5.</p></li>
+</ul>
+</dd>
+</dl>
+<p>getDataStream is a firehose that returns all data from a subgraph endpoint.
+Should query_size, a graphQl parameter be contained in this function? Or moved somewhere else</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="the-streamer-class">
+<h2>The <code class="docutils literal notranslate"><span class="pre">Streamer</span></code> class<a class="headerlink" href="#the-streamer-class" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datastreams.streamer.</span></span><span class="sig-name descname"><span class="pre">Streamer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sub:</span> <span class="pre">~subgrounds.subgrounds.Subgrounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subgraph:</span> <span class="pre">~subgrounds.subgraph.subgraph.Subgraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_list:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sub</strong> (<em>Subgrounds</em>) – Subgrounds object</p></li>
+<li><p><strong>endpoint</strong> (<em>str</em>) – graphql endpoint</p></li>
+<li><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object</p></li>
+<li><p><strong>data_list</strong> (<em>list</em>) – list of dataframes. default is []</p></li>
+<li><p><strong>schema_list</strong> (<em>list</em>) – list of schema objects. default is []</p></li>
+</ul>
+</dd>
+</dl>
+<p>Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. 
+Streamer makes it easier to define query paths by introducing helper functions that expose commonly used 
+Subgrounds functions.</p>
+<p>Introducing these helper functions allows Streamer to queue up multiple queries of different parts of a schema at once. 
+The data flow can be described as follows:</p>
+<ol class="arabic simple">
+<li><p>Load Subgraph -  Load the schema field list from a graphql endpoint. The field list loaded defaults to the ‘Query’ schema.</p></li>
+<li><p>Define Query Path - Streamer allows you to define a query path and queue up multiple queries of different parts of the schema at once.</p></li>
+<li><p>The query path is defined automatically to run every possible query on the subgraph and returns a list of dataframes.</p></li>
+</ol>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.data_list">
+<span class="sig-name descname"><span class="pre">data_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.data_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.endpoint">
+<span class="sig-name descname"><span class="pre">endpoint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.endpoint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.formatFieldStr">
+<span class="sig-name descname"><span class="pre">formatFieldStr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.formatFieldStr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.formatFieldStr" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>field</strong> (<em>str</em>) – field string</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>formatted field string that has been parsed to match the predicted query string</p>
+</dd>
+</dl>
+<p>formatFieldStr formats the field string to match the query string. In order to make the field string queryable, if value does 
+not end with a s and does not start and end with _, make the first non _ character in the string a capital letter.</p>
+<p>CAUTION - this is a heuristic method. There is no Subgraph common naming convention so this heuristic will not always work. In future work,
+it would be worthwhile to add more functionality to make this method more robust and/or robust.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.getFieldPath">
+<span class="sig-name descname"><span class="pre">getFieldPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Subgraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Query'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FieldPath</span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getFieldPath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getFieldPath" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object with a loaded graphql endpoint</p></li>
+<li><p><strong>field</strong> (<em>str</em>) – Enter the string that will be converted to a FieldPath</p></li>
+<li><p><strong>operation</strong> (<em>str</em>) – Enter one of the following - ‘Query’, ‘Mutation’, or ‘Subscription’. Default is ‘Query’ because that is most commonly used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>FieldPath object</p>
+</dd>
+</dl>
+<p>getFieldPath converts a string to a FieldPath object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.getSchemaFields">
+<span class="sig-name descname"><span class="pre">getSchemaFields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Subgraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSchemaFields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSchemaFields" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object with a loaded graphql endpoint</p></li>
+<li><p><strong>schema_object</strong> (<em>str</em>) – Schema object name to get fields list from</p></li>
+<li><p><strong>operation</strong> (<em>str</em>) – Enter one of the following - ‘Query’, ‘Mutation’, or ‘Subscription’. Default is ‘Query’ because that is most commonly used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>strings field list from a Subgraph schema</p>
+</dd>
+</dl>
+<p>getSubgraphField gets a fields list from a subgraph schema.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.getSubgraphSchema">
+<span class="sig-name descname"><span class="pre">getSubgraphSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Subgraph</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSubgraphSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSubgraphSchema" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object with a loaded Subgraph endpoint</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>schema list from a Subgraph</p>
+</dd>
+</dl>
+<p>getSubgraphSchema gets the schema list from a Subgraph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.runStreamer">
+<span class="sig-name descname"><span class="pre">runStreamer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.runStreamer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.runStreamer" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query_size</strong> (<em>int</em>) – number of results to return for each query. default is 5</p>
+</dd>
+</dl>
+<p>runStreamer() gets all queryable fields from a subgraph from every schema. The list of dataframes is stored in the Streamer data_list.
+Set the query_size to the number of results you want to return for each query. Default is 5. There are currently
+four steps in runStreamer():
+#. get schema list 
+#. get schema query field list
+#. filter, format, and sort. End result is subgraph_query_field_list -&gt; sorted_subgraph_field_query_list steps
+#. order the field and schema lists</p>
+<p>TODO - break this function down into four sub functions? Probably a good idea.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.schema_list">
+<span class="sig-name descname"><span class="pre">schema_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.schema_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.sub">
+<span class="sig-name descname"><span class="pre">sub</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Subgrounds</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.sub" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.subgraph">
+<span class="sig-name descname"><span class="pre">subgraph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Subgraph</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.subgraph" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="Intro" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, 0xEvan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

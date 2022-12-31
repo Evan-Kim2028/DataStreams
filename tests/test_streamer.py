@@ -17,6 +17,4 @@ for endpoint in hosted_query_ids:
     dataStreamer = Streamer(sub, endpoint, subgraph)
     dataStreamer.runStreamer(5)
     sub_firehose_data.append(dataStreamer)
-
-
-# NOTE THIS HAS BEEN INTEGRATED INTO test_datastream.py test. Can safely delete this file.
+    

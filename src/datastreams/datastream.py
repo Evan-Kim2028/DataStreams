@@ -20,6 +20,10 @@ class DataStream:
     # Subgrounds is unique for every DataStream?
     def getDataStream(self, endpoint: str, query_size = 5):
         """
+        :param str endpoint: graphql endpoint
+        :param int query_size: number of queries to run. Default is 5.
+
+
         getDataStream is a firehose that returns all data from a subgraph endpoint.
         Should query_size, a graphQl parameter be contained in this function? Or moved somewhere else
         """
