@@ -15,7 +15,7 @@ class Streamer:
     :param str endpoint: graphql endpoint. Default is `None`
     :param Subgraph subgraph: Subgraph object. Default is `None`
     :param list data_list: list of dataframes. Default is `None`
-    :param list schema_list: list of schema objects. Default is `None`
+    :param list schema: list of schema objects. Default is `None`
 
 
     Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. 
@@ -33,12 +33,13 @@ class Streamer:
     endpoint: str = None
     subgraph: Subgraph = None
     sub: Subgrounds = None
-    data_list: list = None
-    schema_list: list = None
+    data: list = None
+    schema: list = None
     
     def __post_init__(self):
     # Perform startup tasks here
         self.setupStreamer()
+        self.schema = self.getSubgraphSchema()
 
     def setupStreamer(self):
         """
@@ -47,8 +48,9 @@ class Streamer:
         """
         self.sub = Subgrounds()
         self.subgraph = self.sub.load_subgraph(self.endpoint)
-        self.data_list = []
-        self.schema_list = []
+        self.data = []
+        self.schema = []
+    
         
 
     def getFieldPath(self, field: str,  operation: str ='Query') -> FieldPath:
@@ -89,7 +91,7 @@ class Streamer:
 
 
         formatFieldStr formats the field string to match the query string. In order to make the field string queryable, if value does 
-        not end with a s and does not start and end with _, make the first non _ character in the string a capital letter.
+        not end with a 's' and does not start and end with _, make the first non _ character in the string a capital letter.
 
         CAUTION - this is a heuristic method. There is no Subgraph common naming convention so this heuristic will not always work. In future work,
         it would be worthwhile to add more functionality to make this method more robust and/or robust. 
@@ -98,40 +100,62 @@ class Streamer:
             field = field[0].upper() + field[1:]
         return field
 
+
+    def filterSchema(self):
+        """
+        :return: list of schema objects and list of query fields
+
+        
+        filterSchema automatically filters the Schema fields for the Query fields and preprocesses for querying.
+        """
+        # get schema query field list
+        query_field_list = self.getSchemaFields(self.schema[self.schema.index('Query')])
+
+     # 2) filter, format, and sort. End result is subgraph_query_field_list -> sorted_subgraph_field_query_list steps
+        filtered_schema = [x for x in self.schema if not x.endswith('_') and x != 'Query' and x != 'Subscription']
+        # format query fields
+        fmt_query_field_list = [self.formatFieldStr(field) for field in query_field_list]
+        # drop empty values if there are any. Empty fields will break the query.
+        fmt_query_field_list = [field for field in fmt_query_field_list if field != '']
+
+        # make a query field list with queryable fields - these are plural values that end with 's'.
+        subgraph_query_field_list = [field for field in fmt_query_field_list if field.endswith('s')]
+        # make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with 's'.
+        subgraph_schema_query_list = [field[0].upper() + field[1:] for field in filtered_schema if not field.endswith('s')]
+        return subgraph_schema_query_list, subgraph_query_field_list
+
     def runStreamer(self, query_size: int =5):
         """
         :param int query_size: number of results to return for each query. default is 5
 
 
-        runStreamer() gets all queryable fields from a subgraph from every schema. The list of dataframes is stored in the Streamer data_list.
+        runStreamer() gets all queryable fields from a subgraph from every schema. The list of dataframes is stored in the Streamer data.
         Set the query_size to the number of results you want to return for each query. Default is 5. There are currently
         four steps in runStreamer():
         
-        #. get schema list 
-        #. get schema query field list
+        #. get schema list (happens at initialization automatically)
+        #. get schema query field list (happens at initialization automatically)
         #. filter, format, and sort. End result is subgraph_query_field_list -> sorted_subgraph_field_query_list steps
         #. order the field and schema lists
 
         TODO - break this function down into four sub functions? Probably a good idea.
         """
 
-    # 1) get schema list 
-        schema_list = self.getSubgraphSchema()
-        self.schema_list.append([value for value in schema_list])
+# REFACTOR TO filterSchema() function
+    # # 2) get schema query field list
+    #     query_field_list = self.getSchemaFields(self.schema[self.schema.index('Query')])
 
-    # 2) get schema query field list
-        query_field_list = self.getSchemaFields(schema_list[schema_list.index('Query')])
+    # # 2) filter, format, and sort. End result is subgraph_query_field_list -> sorted_subgraph_field_query_list steps
+    #     filtered_schema = [x for x in self.schema if not x.endswith('_') and x != 'Query' and x != 'Subscription']
+    #     # format query fields
+    #     fmt_query_field_list = [self.formatFieldStr(field) for field in query_field_list]
+    #     # drop empty values if there are any. Empty fields will break the query.
+    #     fmt_query_field_list = [field for field in fmt_query_field_list if field != '']
+    #     # make a query field list with queryable fields - these are plural values that end with 's'.
+    #     subgraph_query_field_list = [field for field in fmt_query_field_list if field.endswith('s')]
+    #     # make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with 's'.
+    #     subgraph_schema_query_list = [field[0].upper() + field[1:] for field in filtered_schema if not field.endswith('s')]
 
-    # 2) filter, format, and sort. End result is subgraph_query_field_list -> sorted_subgraph_field_query_list steps
-        filtered_schema_list = [x for x in schema_list if not x.endswith('_') and x != 'Query' and x != 'Subscription']
-        # format query fields
-        fmt_query_field_list = [self.formatFieldStr(field) for field in query_field_list]
-        # drop empty values if there are any. Empty fields will break the query.
-        fmt_query_field_list = [field for field in fmt_query_field_list if field != '']
-        # make a query field list with queryable fields - these are plural values that end with 's'.
-        subgraph_query_field_list = [field for field in fmt_query_field_list if field.endswith('s')]
-        # make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with 's'.
-        subgraph_schema_query_list = [field[0].upper() + field[1:] for field in filtered_schema_list if not field.endswith('s')]
 
     # 4) order the field and schema lists
         # order subgraph_query_field_list by alphabet values.
@@ -172,11 +196,11 @@ class Streamer:
             # save the dataframe to the directory
             df.to_csv(f'{dir_name}/{sorted_subgraph_query_field_list[i]}.csv')
 
-            self.data_list.append(df)
+            self.data.append(df)
             end = time.time()
             # PRINT DEBUG TO UNDERSTAND WHAT IS BEING QUERIED
             print(f'Round {i} - query time was {end - start: .3f} seconds \nschema {sorted_subgraph_schema_query_list[i]} with {sorted_subgraph_query_field_list[i]}')
             print(f'There are {len(field_list)} fields in the query - {field_list}. \nLength of df is {len(df)}.')
         outer_end = time.time()
 
-        print(f'{subgraph_name} query took {outer_end - outer_start: .3f} seconds. Running total: {len(self.data_list)} schema dataframes and {sum([len(df) for df in self.data_list])} total rows retrieved.')
+        print(f'{subgraph_name} query took {outer_end - outer_start: .3f} seconds. Running total: {len(self.data)} schema dataframes and {sum([len(df) for df in self.data])} total rows retrieved.')
