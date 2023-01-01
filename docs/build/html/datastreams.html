@@ -53,14 +53,16 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#the-streamer-class">The <code class="docutils literal notranslate"><span class="pre">Streamer</span></code> class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#datastreams.streamer.Streamer"><code class="docutils literal notranslate"><span class="pre">Streamer</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.data_list"><code class="docutils literal notranslate"><span class="pre">Streamer.data_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.data"><code class="docutils literal notranslate"><span class="pre">Streamer.data</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.endpoint"><code class="docutils literal notranslate"><span class="pre">Streamer.endpoint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.filterSchemaFields"><code class="docutils literal notranslate"><span class="pre">Streamer.filterSchemaFields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.formatFieldStr"><code class="docutils literal notranslate"><span class="pre">Streamer.formatFieldStr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.getFieldPath"><code class="docutils literal notranslate"><span class="pre">Streamer.getFieldPath()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.getSchemaFields"><code class="docutils literal notranslate"><span class="pre">Streamer.getSchemaFields()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.getSchemaQueryFields"><code class="docutils literal notranslate"><span class="pre">Streamer.getSchemaQueryFields()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.getSubgraphSchema"><code class="docutils literal notranslate"><span class="pre">Streamer.getSubgraphSchema()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.runStreamer"><code class="docutils literal notranslate"><span class="pre">Streamer.runStreamer()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.schema_list"><code class="docutils literal notranslate"><span class="pre">Streamer.schema_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.schema"><code class="docutils literal notranslate"><span class="pre">Streamer.schema</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.setupStreamer"><code class="docutils literal notranslate"><span class="pre">Streamer.setupStreamer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.sub"><code class="docutils literal notranslate"><span class="pre">Streamer.sub</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#datastreams.streamer.Streamer.subgraph"><code class="docutils literal notranslate"><span class="pre">Streamer.subgraph</span></code></a></li>
@@ -136,7 +138,7 @@ Should query_size, a graphQl parameter be contained in this function? Or moved s
 <h2>The <code class="docutils literal notranslate"><span class="pre">Streamer</span></code> class<a class="headerlink" href="#the-streamer-class" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datastreams.streamer.</span></span><span class="sig-name descname"><span class="pre">Streamer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Subgraph</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Subgrounds</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datastreams.streamer.</span></span><span class="sig-name descname"><span class="pre">Streamer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Subgraph</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Subgrounds</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -145,7 +147,7 @@ Should query_size, a graphQl parameter be contained in this function? Or moved s
 <li><p><strong>endpoint</strong> (<em>str</em>) – graphql endpoint. Default is <cite>None</cite></p></li>
 <li><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object. Default is <cite>None</cite></p></li>
 <li><p><strong>data_list</strong> (<em>list</em>) – list of dataframes. Default is <cite>None</cite></p></li>
-<li><p><strong>schema_list</strong> (<em>list</em>) – list of schema objects. Default is <cite>None</cite></p></li>
+<li><p><strong>schema</strong> (<em>list</em>) – list of schema objects. Default is <cite>None</cite></p></li>
 </ul>
 </dd>
 </dl>
@@ -160,14 +162,31 @@ The data flow can be described as follows:</p>
 <li><p>The query path is defined automatically to run every possible query on the subgraph and returns a list of dataframes.</p></li>
 </ol>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="datastreams.streamer.Streamer.data_list">
-<span class="sig-name descname"><span class="pre">data_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.data_list" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.data" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.endpoint">
 <span class="sig-name descname"><span class="pre">endpoint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.endpoint" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.filterSchemaFields">
+<span class="sig-name descname"><span class="pre">filterSchemaFields</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.filterSchemaFields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.filterSchemaFields" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of schema objects that are queryable</p>
+</dd>
+</dl>
+<p>filterSchemaFields automatically filters the Schema fields for the Query fields sorted alphabetically ascending.</p>
+<ol class="arabic simple">
+<li><p>filter schema by removing fields that end with ‘_’ and ‘Query’ and ‘Subscription’</p></li>
+<li><p>make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with ‘s’.</p></li>
+<li><p>sort subgraph schema list alphabetically ascending</p></li>
+</ol>
+<p>IS IT ‘FORMAT’ OR ‘FILTER’??</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.formatFieldStr">
@@ -181,7 +200,7 @@ The data flow can be described as follows:</p>
 </dd>
 </dl>
 <p>formatFieldStr formats the field string to match the query string. In order to make the field string queryable, if value does 
-not end with a s and does not start and end with _, make the first non _ character in the string a capital letter.</p>
+not end with a ‘s’ and does not start and end with _, make the first non _ character in the string a capital letter.</p>
 <p>CAUTION - this is a heuristic method. There is no Subgraph common naming convention so this heuristic will not always work. In future work,
 it would be worthwhile to add more functionality to make this method more robust and/or robust.</p>
 </dd></dl>
@@ -221,6 +240,24 @@ it would be worthwhile to add more functionality to make this method more robust
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.getSchemaQueryFields">
+<span class="sig-name descname"><span class="pre">getSchemaQueryFields</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSchemaQueryFields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSchemaQueryFields" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of schema objects and list of query fields sorted alphabetically ascending</p>
+</dd>
+</dl>
+<p>getSchemaQueryFields automatically filters the Schema fields for the Query fields.</p>
+<ol class="arabic simple">
+<li><p>getSchemaFields gets the fields list from the ‘Query’ schema object</p></li>
+<li><p>format query fields to strings</p></li>
+<li><p>drop empty values if there are any. Empty fields will break the query.</p></li>
+<li><p>make a query field list with queryable fields - these are plural values that end with ‘s’.</p></li>
+<li><p>sort subgraph_query_field alphabetaically ascending</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.getSubgraphSchema">
 <span class="sig-name descname"><span class="pre">getSubgraphSchema</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSubgraphSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSubgraphSchema" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -239,12 +276,12 @@ it would be worthwhile to add more functionality to make this method more robust
 <dd class="field-odd"><p><strong>query_size</strong> (<em>int</em>) – number of results to return for each query. default is 5</p>
 </dd>
 </dl>
-<p>runStreamer() gets all queryable fields from a subgraph from every schema. The list of dataframes is stored in the Streamer data_list.
+<p>runStreamer() gets all queryable fields from a subgraph from every schema. The list of dataframes is stored in the Streamer data.
 Set the query_size to the number of results you want to return for each query. Default is 5. There are currently
 four steps in runStreamer():</p>
 <ol class="arabic simple">
-<li><p>get schema list</p></li>
-<li><p>get schema query field list</p></li>
+<li><p>get schema list (happens at initialization automatically)</p></li>
+<li><p>get schema query field list (happens at initialization automatically)</p></li>
 <li><p>filter, format, and sort. End result is subgraph_query_field_list -&gt; sorted_subgraph_field_query_list steps</p></li>
 <li><p>order the field and schema lists</p></li>
 </ol>
@@ -252,8 +289,8 @@ four steps in runStreamer():</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="datastreams.streamer.Streamer.schema_list">
-<span class="sig-name descname"><span class="pre">schema_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.schema_list" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="datastreams.streamer.Streamer.schema">
+<span class="sig-name descname"><span class="pre">schema</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.schema" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

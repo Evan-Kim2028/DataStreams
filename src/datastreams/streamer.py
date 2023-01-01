@@ -103,28 +103,53 @@ class Streamer:
 
     def filterSchemaFields(self):
         """
-        :return: list of schema objects and list of query fields
+        :return: list of schema objects that are queryable
 
+        filterSchemaFields automatically filters the Schema fields for the Query fields sorted alphabetically ascending.
 
-        filterSchemaFields automatically filters the Schema fields for the Query fields and preprocesses for querying.
+        #. filter schema by removing fields that end with '_' and 'Query' and 'Subscription'
+        #. make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with 's'.
+        #. sort subgraph schema list alphabetically ascending
+        
+        IS IT 'FORMAT' OR 'FILTER'??
         """
-        # get schema query field list
-        query_field_list = self.getSchemaFields(self.schema[self.schema.index('Query')])
-
+        # filter schema by removing fields that end with '_' and 'Query' and 'Subscription'
         filtered_schema = [x for x in self.schema if not x.endswith('_') and x != 'Query' and x != 'Subscription']
-        # format query fields to strings
-        fmt_query_field_list = [self.formatFieldStr(field) for field in query_field_list]
-        # drop empty values if there are any. Empty fields will break the query.
-        fmt_query_field_list = [field for field in fmt_query_field_list if field != '']
 
-        # THESE ARE THE OUTPUTS
-        # TODO - refactor the outputs more elegantly. It's not clear where they are going yet
+        # make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with 's'.
+        subgraph_schema_query = [field[0].upper() + field[1:] for field in filtered_schema if not field.endswith('s')]
+
+        # sort subgraph schema list alphabetically ascending
+        return sorted(subgraph_schema_query, reverse=False)
+
+
+    def getSchemaQueryFields(self):
+        """
+        :return: list of schema objects and list of query fields sorted alphabetically ascending
+
+        getSchemaQueryFields automatically filters the Schema fields for the Query fields. 
+
+        #. getSchemaFields gets the fields list from the 'Query' schema object
+        #. format query fields to strings
+        #. drop empty values if there are any. Empty fields will break the query.
+        #. make a query field list with queryable fields - these are plural values that end with 's'.
+        #. sort subgraph_query_field alphabetaically ascending
+        """
+
+        query_field = self.getSchemaFields(self.schema[self.schema.index('Query')])
+
+        # format query fields to strings
+        fmt_query_field = [self.formatFieldStr(field) for field in query_field]
+
+        # drop empty values if there are any. Empty fields will break the query.
+        fmt_query_field = [field for field in fmt_query_field if field != '']
 
         # make a query field list with queryable fields - these are plural values that end with 's'.
-        subgraph_query_field_list = [field for field in fmt_query_field_list if field.endswith('s')]
-        # make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with 's'.
-        subgraph_schema_query_list = [field[0].upper() + field[1:] for field in filtered_schema if not field.endswith('s')]
-        return subgraph_schema_query_list, subgraph_query_field_list
+        subgraph_query_field = [field for field in fmt_query_field if field.endswith('s')]
+
+        # sort subgraph_query_field alphabetaically ascending
+        return sorted(subgraph_query_field, reverse=False)
+
 
     def runStreamer(self, query_size: int =5):
         """

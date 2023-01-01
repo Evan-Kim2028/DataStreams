@@ -85,7 +85,7 @@
 <span class="sd">    :param str endpoint: graphql endpoint. Default is `None`</span>
 <span class="sd">    :param Subgraph subgraph: Subgraph object. Default is `None`</span>
 <span class="sd">    :param list data_list: list of dataframes. Default is `None`</span>
-<span class="sd">    :param list schema_list: list of schema objects. Default is `None`</span>
+<span class="sd">    :param list schema: list of schema objects. Default is `None`</span>
 
 
 <span class="sd">    Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. </span>
@@ -103,12 +103,13 @@
     <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">subgraph</span><span class="p">:</span> <span class="n">Subgraph</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">sub</span><span class="p">:</span> <span class="n">Subgrounds</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">data_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">schema_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">schema</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
     
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1"># Perform startup tasks here</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setupStreamer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSubgraphSchema</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Streamer.setupStreamer"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.setupStreamer">[docs]</a>    <span class="k">def</span> <span class="nf">setupStreamer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -117,8 +118,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sub</span> <span class="o">=</span> <span class="n">Subgrounds</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="o">.</span><span class="n">load_subgraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">schema_list</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="p">[]</span></div>
+    
         
 
 <div class="viewcode-block" id="Streamer.getFieldPath"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getFieldPath">[docs]</a>    <span class="k">def</span> <span class="nf">getFieldPath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s1">&#39;Query&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldPath</span><span class="p">:</span>
@@ -159,7 +161,7 @@
 
 
 <span class="sd">        formatFieldStr formats the field string to match the query string. In order to make the field string queryable, if value does </span>
-<span class="sd">        not end with a s and does not start and end with _, make the first non _ character in the string a capital letter.</span>
+<span class="sd">        not end with a &#39;s&#39; and does not start and end with _, make the first non _ character in the string a capital letter.</span>
 
 <span class="sd">        CAUTION - this is a heuristic method. There is no Subgraph common naming convention so this heuristic will not always work. In future work,</span>
 <span class="sd">        it would be worthwhile to add more functionality to make this method more robust and/or robust. </span>
@@ -168,40 +170,89 @@
             <span class="n">field</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="k">return</span> <span class="n">field</span></div>
 
+
+<div class="viewcode-block" id="Streamer.filterSchemaFields"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.filterSchemaFields">[docs]</a>    <span class="k">def</span> <span class="nf">filterSchemaFields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: list of schema objects that are queryable</span>
+
+<span class="sd">        filterSchemaFields automatically filters the Schema fields for the Query fields sorted alphabetically ascending.</span>
+
+<span class="sd">        #. filter schema by removing fields that end with &#39;_&#39; and &#39;Query&#39; and &#39;Subscription&#39;</span>
+<span class="sd">        #. make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with &#39;s&#39;.</span>
+<span class="sd">        #. sort subgraph schema list alphabetically ascending</span>
+<span class="sd">        </span>
+<span class="sd">        IS IT &#39;FORMAT&#39; OR &#39;FILTER&#39;??</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># filter schema by removing fields that end with &#39;_&#39; and &#39;Query&#39; and &#39;Subscription&#39;</span>
+        <span class="n">filtered_schema</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;Query&#39;</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;Subscription&#39;</span><span class="p">]</span>
+
+        <span class="c1"># make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with &#39;s&#39;.</span>
+        <span class="n">subgraph_schema_query</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">filtered_schema</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)]</span>
+
+        <span class="c1"># sort subgraph schema list alphabetically ascending</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subgraph_schema_query</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Streamer.getSchemaQueryFields"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getSchemaQueryFields">[docs]</a>    <span class="k">def</span> <span class="nf">getSchemaQueryFields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: list of schema objects and list of query fields sorted alphabetically ascending</span>
+
+<span class="sd">        getSchemaQueryFields automatically filters the Schema fields for the Query fields. </span>
+
+<span class="sd">        #. getSchemaFields gets the fields list from the &#39;Query&#39; schema object</span>
+<span class="sd">        #. format query fields to strings</span>
+<span class="sd">        #. drop empty values if there are any. Empty fields will break the query.</span>
+<span class="sd">        #. make a query field list with queryable fields - these are plural values that end with &#39;s&#39;.</span>
+<span class="sd">        #. sort subgraph_query_field alphabetaically ascending</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">query_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSchemaFields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;Query&#39;</span><span class="p">)])</span>
+
+        <span class="c1"># format query fields to strings</span>
+        <span class="n">fmt_query_field</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">formatFieldStr</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">query_field</span><span class="p">]</span>
+
+        <span class="c1"># drop empty values if there are any. Empty fields will break the query.</span>
+        <span class="n">fmt_query_field</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fmt_query_field</span> <span class="k">if</span> <span class="n">field</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+
+        <span class="c1"># make a query field list with queryable fields - these are plural values that end with &#39;s&#39;.</span>
+        <span class="n">subgraph_query_field</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fmt_query_field</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)]</span>
+
+        <span class="c1"># sort subgraph_query_field alphabetaically ascending</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subgraph_query_field</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="Streamer.runStreamer"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.runStreamer">[docs]</a>    <span class="k">def</span> <span class="nf">runStreamer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span><span class="mi">5</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param int query_size: number of results to return for each query. default is 5</span>
 
 
-<span class="sd">        runStreamer() gets all queryable fields from a subgraph from every schema. The list of dataframes is stored in the Streamer data_list.</span>
+<span class="sd">        runStreamer() gets all queryable fields from a subgraph from every schema. The list of dataframes is stored in the Streamer data.</span>
 <span class="sd">        Set the query_size to the number of results you want to return for each query. Default is 5. There are currently</span>
 <span class="sd">        four steps in runStreamer():</span>
 <span class="sd">        </span>
-<span class="sd">        #. get schema list </span>
-<span class="sd">        #. get schema query field list</span>
+<span class="sd">        #. get schema list (happens at initialization automatically)</span>
+<span class="sd">        #. get schema query field list (happens at initialization automatically)</span>
 <span class="sd">        #. filter, format, and sort. End result is subgraph_query_field_list -&gt; sorted_subgraph_field_query_list steps</span>
 <span class="sd">        #. order the field and schema lists</span>
 
 <span class="sd">        TODO - break this function down into four sub functions? Probably a good idea.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-    <span class="c1"># 1) get schema list </span>
-        <span class="n">schema_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSubgraphSchema</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">schema_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">schema_list</span><span class="p">])</span>
+<span class="c1"># REFACTOR TO filterSchemaFields() function</span>
+    <span class="c1"># # 2) get schema query field list</span>
+    <span class="c1">#     query_field_list = self.getSchemaFields(self.schema[self.schema.index(&#39;Query&#39;)])</span>
 
-    <span class="c1"># 2) get schema query field list</span>
-        <span class="n">query_field_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSchemaFields</span><span class="p">(</span><span class="n">schema_list</span><span class="p">[</span><span class="n">schema_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;Query&#39;</span><span class="p">)])</span>
+    <span class="c1"># # 2) filter, format, and sort. End result is subgraph_query_field_list -&gt; sorted_subgraph_field_query_list steps</span>
+    <span class="c1">#     filtered_schema = [x for x in self.schema if not x.endswith(&#39;_&#39;) and x != &#39;Query&#39; and x != &#39;Subscription&#39;]</span>
+    <span class="c1">#     # format query fields</span>
+    <span class="c1">#     fmt_query_field_list = [self.formatFieldStr(field) for field in query_field_list]</span>
+    <span class="c1">#     # drop empty values if there are any. Empty fields will break the query.</span>
+    <span class="c1">#     fmt_query_field_list = [field for field in fmt_query_field_list if field != &#39;&#39;]</span>
+    <span class="c1">#     # make a query field list with queryable fields - these are plural values that end with &#39;s&#39;.</span>
+    <span class="c1">#     subgraph_query_field_list = [field for field in fmt_query_field_list if field.endswith(&#39;s&#39;)]</span>
+    <span class="c1">#     # make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with &#39;s&#39;.</span>
+    <span class="c1">#     subgraph_schema_query_list = [field[0].upper() + field[1:] for field in filtered_schema if not field.endswith(&#39;s&#39;)]</span>
 
-    <span class="c1"># 2) filter, format, and sort. End result is subgraph_query_field_list -&gt; sorted_subgraph_field_query_list steps</span>
-        <span class="n">filtered_schema_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">schema_list</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;Query&#39;</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;Subscription&#39;</span><span class="p">]</span>
-        <span class="c1"># format query fields</span>
-        <span class="n">fmt_query_field_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">formatFieldStr</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">query_field_list</span><span class="p">]</span>
-        <span class="c1"># drop empty values if there are any. Empty fields will break the query.</span>
-        <span class="n">fmt_query_field_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fmt_query_field_list</span> <span class="k">if</span> <span class="n">field</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
-        <span class="c1"># make a query field list with queryable fields - these are plural values that end with &#39;s&#39;.</span>
-        <span class="n">subgraph_query_field_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fmt_query_field_list</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)]</span>
-        <span class="c1"># make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with &#39;s&#39;.</span>
-        <span class="n">subgraph_schema_query_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">filtered_schema_list</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)]</span>
 
     <span class="c1"># 4) order the field and schema lists</span>
         <span class="c1"># order subgraph_query_field_list by alphabet values.</span>
@@ -242,14 +293,14 @@
             <span class="c1"># save the dataframe to the directory</span>
             <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dir_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">sorted_subgraph_query_field_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
             <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
             <span class="c1"># PRINT DEBUG TO UNDERSTAND WHAT IS BEING QUERIED</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Round </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> - query time was </span><span class="si">{</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="si">:</span><span class="s1"> .3f</span><span class="si">}</span><span class="s1"> seconds </span><span class="se">\n</span><span class="s1">schema </span><span class="si">{</span><span class="n">sorted_subgraph_schema_query_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1"> with </span><span class="si">{</span><span class="n">sorted_subgraph_query_field_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">field_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> fields in the query - </span><span class="si">{</span><span class="n">field_list</span><span class="si">}</span><span class="s1">. </span><span class="se">\n</span><span class="s1">Length of df is </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
         <span class="n">outer_end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">subgraph_name</span><span class="si">}</span><span class="s1"> query took </span><span class="si">{</span><span class="n">outer_end</span> <span class="o">-</span> <span class="n">outer_start</span><span class="si">:</span><span class="s1"> .3f</span><span class="si">}</span><span class="s1"> seconds. Running total: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> schema dataframes and </span><span class="si">{</span><span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_list</span><span class="p">])</span><span class="si">}</span><span class="s1"> total rows retrieved.&#39;</span><span class="p">)</span></div></div>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">subgraph_name</span><span class="si">}</span><span class="s1"> query took </span><span class="si">{</span><span class="n">outer_end</span> <span class="o">-</span> <span class="n">outer_start</span><span class="si">:</span><span class="s1"> .3f</span><span class="si">}</span><span class="s1"> seconds. Running total: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s1"> schema dataframes and </span><span class="si">{</span><span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">])</span><span class="si">}</span><span class="s1"> total rows retrieved.&#39;</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
