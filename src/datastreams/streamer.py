@@ -162,6 +162,7 @@ class Streamer:
         """
         # create a list of tuples between query_size and query_list
         query_list = [(query, query_size) for query in query_list]
+        df_data = []
 
         start_time = time.time()
         # Create a pool of 8 worker processes   
@@ -169,12 +170,11 @@ class Streamer:
             # Calculate the square of each number in parallel
             for args in query_list:
                 future = executor.submit(self.runQuery, *args)
-                
-        data_list = future.result()
-        
-        end_time = time.time() - start_time
-        print(f'{len(self.queryFields)} queries, parallelized 8 cores: {end_time:.2f} seconds. Largest df is {len(max(data_list, key=len))}\n')
+                df_data.append(future.result())
 
-        return data_list
+        end_time = time.time() - start_time
+        print(f'{len(self.queryFields)} queries, parallelized 8 cores: {end_time:.2f} seconds. Largest df is {len(max(df_data, key=len))}\n')
+
+        return df_data
 
 
