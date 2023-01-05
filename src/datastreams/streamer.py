@@ -1,12 +1,12 @@
 import os
 import time
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from subgrounds.subgraph.subgraph import Subgraph
-from subgrounds.schema import TypeRef
 from subgrounds.subgrounds import Subgrounds
 from subgrounds.subgraph.fieldpath import FieldPath
 
+from pandas import DataFrame
 
 @dataclass
 class Streamer:
@@ -16,6 +16,7 @@ class Streamer:
     :param Subgraph subgraph: Subgraph object. Default is `None`
     :param list data_list: list of dataframes. Default is `None`
     :param list schema: list of schema objects. Default is `None`
+    :param list queryFields: list of queryable fields. Default is `None`
 
 
     Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. 
@@ -35,11 +36,13 @@ class Streamer:
     sub: Subgrounds = None
     data: list = None
     schema: list = None
+    queryFields: list = None
     
     def __post_init__(self):
     # Perform startup tasks here
         self.setupStreamer()
         self.schema = self.getSubgraphSchema()
+        self.queryFields = self.filterQueryFields()
 
     def setupStreamer(self):
         """
@@ -50,8 +53,6 @@ class Streamer:
         self.subgraph = self.sub.load_subgraph(self.endpoint)
         self.data = []
         self.schema = []
-    
-        
 
     def getFieldPath(self, field: str,  operation: str ='Query') -> FieldPath:
         """
@@ -60,7 +61,7 @@ class Streamer:
         :return: FieldPath object
 
 
-        getFieldPath converts a string to a FieldPath object.
+        getFieldPath converts a string to a FieldPath object. In a Subgrounds query, the format follows subgrounds.schema.FieldPath.
         """
         return self.subgraph.__getattribute__(operation).__getattribute__(field)
 
@@ -79,155 +80,69 @@ class Streamer:
         :param str operation: Enter one of the following - 'Query', 'Mutation', or 'Subscription'. Default is 'Query' because that is most commonly used.
         :return: strings field list from a Subgraph schema
 
-
         getSubgraphField gets a fields list from a subgraph schema.
         """
         return list(field.name for field in self.subgraph.__getattribute__(schema_object)._object.fields)
 
-    def formatFieldStr(self, field: str) -> str:
+    def getQueryFields(self) -> list[str]:
         """
-        :param str field: field string
-        :return: formatted field string that has been parsed to match the predicted query string
+        :return: list[str] of queryable fields from the subgraph schema
 
-
-        formatFieldStr formats the field string to match the query string. In order to make the field string queryable, if value does 
-        not end with a 's' and does not start and end with _, make the first non _ character in the string a capital letter.
-
-        CAUTION - this is a heuristic method. There is no Subgraph common naming convention so this heuristic will not always work. In future work,
-        it would be worthwhile to add more functionality to make this method more robust and/or robust. 
+        Get all queryable fields from the subgraph schema.
         """
-        if not field.endswith('s') and not field.startswith('_'):
-            field = field[0].upper() + field[1:]
-        return field
+        query_field_paths = self.getSchemaFields(self.schema[self.schema.index('Query')])
+        # print(f'query field paths for this {len(query_field_paths)} length schema are {query_field_paths}')
 
+        return query_field_paths
 
-    def filterSchemaFields(self):
+    def filterQueryFields(self) -> list[FieldPath]:
         """
-        :return: list of schema objects that are queryable
+        :return: list[FieldPath] of queryable fields that end with an 's'
 
-        filterSchemaFields automatically filters the Schema fields for the Query fields sorted alphabetically ascending.
+        Filter fields that end with an 's'
+        """
 
-        #. filter schema by removing fields that end with '_' and 'Query' and 'Subscription'
-        #. make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with 's'.
-        #. sort subgraph schema list alphabetically ascending
+        # get query field list
+        query_field_paths = self.getQueryFields()
+
+        filtered_query_field_paths = [field for field in query_field_paths if field.endswith('s')]
+
+        # filter out None values
+        filtered_query_field_paths = list(filter(None, filtered_query_field_paths))
+
+        # convert str -> FieldPath
+        filtered_query_field_paths = [self.getFieldPath(field) for field in filtered_query_field_paths]
+        return filtered_query_field_paths
+
+    def runQuery(self, query_field: FieldPath, query_size: int=4) -> DataFrame:
+        """
+        :param FieldPath query_field: FieldPath object
+        :param int query_size: number of query results to return. Default is 5.
+        :return: DataFrame object
+
+        setupQuery() is a helper function that returns a DataFrame object for a query.
+        """
+        print(f'\nfield path param {query_field}')
+
+        # 2) Run query
+        df = self.sub.query_df(query_field(first=query_size))
         
-        IS IT 'FORMAT' OR 'FILTER'??
+        return df
+
+
+
+    def runStreamerLoop(self) -> list[DataFrame]:
         """
-        # filter schema by removing fields that end with '_' and 'Query' and 'Subscription'
-        filtered_schema = [x for x in self.schema if not x.endswith('_') and x != 'Query' and x != 'Subscription']
+        :return: list of dataframes
 
-        # make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with 's'.
-        subgraph_schema_query = [field[0].upper() + field[1:] for field in filtered_schema if not field.endswith('s')]
-
-        # sort subgraph schema list alphabetically ascending
-        return sorted(subgraph_schema_query, reverse=False)
-
-
-    def getSchemaQueryFields(self):
+        runStreamer() runs through ALL queryable fields list and returns a list of query dataframes.
         """
-        :return: list of schema objects and list of query fields sorted alphabetically ascending
+        df_data = []
 
-        getSchemaQueryFields automatically filters the Schema fields for the Query fields. 
+        for i in range(len(self.queryFields)):
+            df = self.runQuery(self.queryFields[i])
+            df_data.append(df)
 
-        #. getSchemaFields gets the fields list from the 'Query' schema object
-        #. format query fields to strings
-        #. drop empty values if there are any. Empty fields will break the query.
-        #. make a query field list with queryable fields - these are plural values that end with 's'.
-        #. sort subgraph_query_field alphabetaically ascending
-        """
-
-        query_field = self.getSchemaFields(self.schema[self.schema.index('Query')])
-
-        # format query fields to strings
-        fmt_query_field = [self.formatFieldStr(field) for field in query_field]
-
-        # drop empty values if there are any. Empty fields will break the query.
-        fmt_query_field = [field for field in fmt_query_field if field != '']
-
-        # make a query field list with queryable fields - these are plural values that end with 's'.
-        subgraph_query_field = [field for field in fmt_query_field if field.endswith('s')]
-
-        # sort subgraph_query_field alphabetaically ascending
-        return sorted(subgraph_query_field, reverse=False)
+        return df_data
 
 
-    def runStreamer(self, query_size: int =5):
-        """
-        :param int query_size: number of results to return for each query. default is 5
-
-
-        runStreamer() gets all queryable fields from a subgraph from every schema. The list of dataframes is stored in the Streamer data.
-        Set the query_size to the number of results you want to return for each query. Default is 5. There are currently
-        four steps in runStreamer():
-        
-        #. get schema list (happens at initialization automatically)
-        #. get schema query field list (happens at initialization automatically)
-        #. filter, format, and sort. End result is subgraph_query_field_list -> sorted_subgraph_field_query_list steps
-        #. order the field and schema lists
-
-        TODO - break this function down into four sub functions? Probably a good idea.
-        """
-
-# REFACTOR TO filterSchemaFields() function
-    # # 2) get schema query field list
-    #     query_field_list = self.getSchemaFields(self.schema[self.schema.index('Query')])
-
-    # # 2) filter, format, and sort. End result is subgraph_query_field_list -> sorted_subgraph_field_query_list steps
-    #     filtered_schema = [x for x in self.schema if not x.endswith('_') and x != 'Query' and x != 'Subscription']
-    #     # format query fields
-    #     fmt_query_field_list = [self.formatFieldStr(field) for field in query_field_list]
-    #     # drop empty values if there are any. Empty fields will break the query.
-    #     fmt_query_field_list = [field for field in fmt_query_field_list if field != '']
-    #     # make a query field list with queryable fields - these are plural values that end with 's'.
-    #     subgraph_query_field_list = [field for field in fmt_query_field_list if field.endswith('s')]
-    #     # make a subgraph schema list with schema objects that relate to the query fields. These are singular values that do not end with 's'.
-    #     subgraph_schema_query_list = [field[0].upper() + field[1:] for field in filtered_schema if not field.endswith('s')]
-
-
-    # 4) order the field and schema lists
-        # order subgraph_query_field_list by alphabet values.
-        sorted_subgraph_query_field_list = sorted(subgraph_query_field_list, key=lambda x: x.rstrip('s'))
-        # order subgraph schema list by alphabet values. If '_' is first character, sort by the next strig index.
-        sorted_subgraph_schema_query_list = sorted(subgraph_schema_query_list, key=lambda x: x.lstrip('_'))
-
-        # PRINT HELP DEBUG STATEMENTS. CURRENTLY DISABLED
-        print(f'subgraph_schema_query_list and subgraph_query_field_list (ordered)')
-        for i in range(len(subgraph_query_field_list)):
-            print(f'{sorted_subgraph_schema_query_list[i]}, {sorted_subgraph_query_field_list[i]}')
-    
-        # get values of endpoint after the last /
-        subgraph_name = self.endpoint.split('/')[-1]
-
-        outer_start = time.time()
-
-        # automate querying subgraph data for each "queryable" subgraph schema object
-        for i in range(len(sorted_subgraph_query_field_list)):
-            # start query timer
-            start = time.time()
-            # get query field path
-            field_list = self.getSchemaFields(sorted_subgraph_schema_query_list[i])
-            field_path = self.getFieldPath(sorted_subgraph_query_field_list[i])
-            # end query timer
-            field_path_params = field_path(first=query_size) # params refers to the the GraphQL query search parameters such as first, last, descending, etc
-            
-            df = self.sub.query_df(field_path_params, field_list)
-            
-            # make a directory name of subgraph name and query field list. 
-            # This will be used to create a directory to store the dataframes
-            dir_name = f'{subgraph_name}'
-
-            # make a directory to store the dataframes if directory doesn't exist
-            if not os.path.exists(dir_name):
-                os.mkdir(dir_name)
-
-            # save the dataframe to the directory
-            df.to_csv(f'{dir_name}/{sorted_subgraph_query_field_list[i]}.csv')
-
-            self.data.append(df)
-            end = time.time()
-            # PRINT DEBUG TO UNDERSTAND WHAT IS BEING QUERIED
-            print(f'Round {i} - query time was {end - start: .3f} seconds \nschema {sorted_subgraph_schema_query_list[i]} with {sorted_subgraph_query_field_list[i]}')
-            print(f'There are {len(field_list)} fields in the query - {field_list}. \nLength of df is {len(df)}.')
-        outer_end = time.time()
-
-        print(f'{subgraph_name} query took {outer_end - outer_start: .3f} seconds. Running total: {len(self.data)} schema dataframes and {sum([len(df) for df in self.data])} total rows retrieved.')
