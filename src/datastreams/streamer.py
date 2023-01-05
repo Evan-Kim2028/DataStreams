@@ -117,12 +117,12 @@ class Streamer:
     def runQuery(self, query_field: FieldPath, query_size: int=4) -> DataFrame:
         """
         :param FieldPath query_field: FieldPath object
-        :param int query_size: number of query results to return. Default is 5.
+        :param int query_size: number of query results to return. Default is 4.
         :return: DataFrame object
 
         setupQuery() is a helper function that returns a DataFrame object for a query.
         """
-        print(f'\nfield path param {query_field}')
+        print(f'FIELD - {query_field}')
 
         # 2) Run query
         df = self.sub.query_df(query_field(first=query_size))
@@ -131,12 +131,13 @@ class Streamer:
 
 
 
-    def runStreamerLoop(self) -> list[DataFrame]:
+    def runStreamerLoop(self) -> dict:
         """
         :return: list of dataframes
 
         runStreamer() runs through ALL queryable fields list and returns a list of query dataframes.
         """
+        # create empty dictionary to store query data
         df_data = []
 
         for i in range(len(self.queryFields)):

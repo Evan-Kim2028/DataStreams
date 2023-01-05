@@ -25,9 +25,7 @@ print(f'\nTHE ENDPOINT IS {ds.endpoint}\n')
 # ======================================================================================
 
 
-
 print(ds.runStreamerLoop())
-
 
 
 
