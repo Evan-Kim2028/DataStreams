@@ -28,12 +28,12 @@ print(f'\nTHE ENDPOINT IS {subgraph_name}\n')
 #     print(f'{query_schema[i]}, type: {type(query_schema[i])}')
 # ======================================================================================
 
-print(f'Non-Parallel Streamer Loop')
-ds.runStreamerLoop()
+# print(f'Non-Parallel Streamer Loop')
+# ds.runStreamerLoop(query_size=13)
 
 print(f'Parallel Streamer Loop')
 query_list = ds.queryFields
-ds.runStreamerLoopParallel(query_list=query_list, query_size=10)
+ds.runStreamerLoopParallel(query_list=query_list, query_size=13)
 
 
 print("\n\nscript is FINISHED")
