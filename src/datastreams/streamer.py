@@ -141,6 +141,7 @@ class Streamer:
         df_data = []
 
         for i in range(len(self.queryFields)):
+            print(f'RUNNING QUERY {i}')
             df = self.runQuery(self.queryFields[i])
             df_data.append(df)
 
