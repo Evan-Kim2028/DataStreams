@@ -171,8 +171,7 @@ class Streamer:
                 future = executor.submit(self.runQuery, *args)
                 
         data_list = future.result()
-        print(type(data_list))
-
+        
         end_time = time.time() - start_time
         print(f'{len(self.queryFields)} queries, parallelized 8 cores: {end_time:.2f} seconds. Largest df is {len(max(data_list, key=len))}\n')
 
