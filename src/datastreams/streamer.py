@@ -17,6 +17,7 @@ class Streamer:
     :param list data_list: list of dataframes. Default is `None`
     :param list schema: list of schema objects. Default is `None`
     :param list queryFields: list of queryable fields. Default is `None`
+    :param list queryStrs: list of query strings. Default is `None`
 
 
     Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. 
@@ -37,6 +38,7 @@ class Streamer:
     data: list = None
     schema: list = None
     queryFields: list = None
+    queryStrs: list[str] = None
     
     def __post_init__(self):
     # Perform startup tasks here
@@ -110,6 +112,8 @@ class Streamer:
         # filter out None values
         filtered_query_field_paths = list(filter(None, filtered_query_field_paths))
 
+        self.queryStrs = filtered_query_field_paths
+
         # convert str -> FieldPath
         filtered_query_field_paths = [self.getFieldPath(field) for field in filtered_query_field_paths]
         return filtered_query_field_paths
@@ -130,13 +134,14 @@ class Streamer:
         return df
 
 
-
     def runStreamerLoop(self, query_size: int = 10) -> list[DataFrame]:
         """
+        *SOFT DEPRECATION* - use runStreamerLoopParallel() instead. This function is left in for legacy purposes.
+
         :param int query_size: number of query results to return. Default is 10.
         :return: list of dataframes
 
-        runStreamer() runs through ALL queryable fields list and returns a list of query dataframes.
+        runStreamer() runs through ALL queryable fields list and returns a list of query dataframes. 
         """
         # create empty dictionary to store query data
         df_data = []
@@ -151,11 +156,11 @@ class Streamer:
         print(f'{len(self.queryFields)} queries, single core: {end_time:.2f} seconds. Largest df is {len(max(df_data, key=len))}\n')
         return df_data
 
-    def runStreamerLoopParallel(self, query_list: list[FieldPath], query_size: int = 10, cores: int = 10) -> list[DataFrame]:
+    def runStreamerLoopParallel(self, query_list: list[FieldPath], query_size: int = 10, cores: int = 4) -> list[DataFrame]:
         """
         :param list[FieldPath] query_list: list of FieldPath objects
         :param int query_size: number of query results to return. Default is 10.
-        :param int cores: number of cores to use. Default is 8.
+        :param int cores: number of cores to use. Default is 4.
         :return: list of dataframes
 
         runStreamer() runs through ALL queryable fields list and returns a list of query dataframes.
@@ -165,7 +170,7 @@ class Streamer:
         df_data = []
 
         start_time = time.time()
-        # Create a pool of 8 worker processes   
+        # Create a pool of 4 worker processes   
         with concurrent.futures.ThreadPoolExecutor(max_workers=cores) as executor:
             # Calculate the square of each number in parallel
             for args in query_list:
@@ -173,7 +178,7 @@ class Streamer:
                 df_data.append(future.result())
 
         end_time = time.time() - start_time
-        print(f'{len(self.queryFields)} queries, parallelized 8 cores: {end_time:.2f} seconds. Largest df is {len(max(df_data, key=len))}\n')
+        print(f'{len(self.queryFields)} queries, parallelized 4 cores: {end_time:.2f} seconds. Largest df is {len(max(df_data, key=len))}\n')
 
         return df_data
 
