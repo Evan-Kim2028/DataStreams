@@ -1,4 +1,4 @@
-import os
+import concurrent.futures
 import time
 
 from dataclasses import dataclass
@@ -131,7 +131,7 @@ class Streamer:
 
 
 
-    def runStreamerLoop(self) -> dict:
+    def runStreamerLoop(self) -> list[DataFrame]:
         """
         :return: list of dataframes
 
@@ -140,11 +140,38 @@ class Streamer:
         # create empty dictionary to store query data
         df_data = []
 
+        #start time
+        start_time = time.time()
         for i in range(len(self.queryFields)):
-            print(f'RUNNING QUERY {i}')
             df = self.runQuery(self.queryFields[i])
             df_data.append(df)
-
+        # end time
+        end_time = time.time() - start_time
+        print(f'{len(self.queryFields)} queries, single core: {end_time:.2f} seconds\n')
         return df_data
+
+    def runStreamerLoopParallel(self, query_list: list[FieldPath], query_size: int = 4, cores: int = 8) -> list[DataFrame]:
+        """
+        :param list[FieldPath] query_list: list of FieldPath objects
+        :param int query_size: number of query results to return. Default is 4.
+        :param int cores: number of cores to use. Default is 8.
+        :return: list of dataframes
+
+        runStreamer() runs through ALL queryable fields list and returns a list of query dataframes.
+        """
+        # create a list of tuples between query_size and query_list
+        # query_list = self.setupParallel(query_list, query_size)
+
+        start_time = time.time()
+        # Create a pool of 8 worker processes   
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+            # Calculate the square of each number in parallel
+            for item in query_list:
+                future = executor.submit(self.runQuery, item)
+                
+        end_time = time.time() - start_time
+        print(f'{len(self.queryFields)} queries, parallelized 8 cores: {end_time:.2f} seconds\n')
+
+        return future.result()
 
 

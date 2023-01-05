@@ -1,12 +1,16 @@
 from datastreams.streamer import Streamer
 
 # Run Streamer over a list of subgraph IDs
-endpoint = 'https://api.thegraph.com/subgraphs/name/cowprotocol/cow'
-# endpoint = 'https://api.thegraph.com/subgraphs/name/messari/uniswap-v3-arbitrum'
+# endpoint = 'https://api.thegraph.com/subgraphs/name/cowprotocol/cow'
+endpoint = 'https://api.thegraph.com/subgraphs/name/messari/uniswap-v3-arbitrum'
 
 
 ds = Streamer(endpoint)
-print(f'\nTHE ENDPOINT IS {ds.endpoint}\n')
+
+# get values of endpoint after the last /
+subgraph_name = ds.endpoint.split('/')[-1]
+
+print(f'\nTHE ENDPOINT IS {subgraph_name}\n')
 
 # ======================================================================================
 # print(f'The schema list is initialized at startup and is:\n')
@@ -24,9 +28,12 @@ print(f'\nTHE ENDPOINT IS {ds.endpoint}\n')
 #     print(f'{query_schema[i]}, type: {type(query_schema[i])}')
 # ======================================================================================
 
+print(f'Non-Parallel Streamer Loop')
+ds.runStreamerLoop()
 
-print(ds.runStreamerLoop())
-
+print(f'Parallel Streamer Loop')
+query_list = ds.queryFields
+ds.runStreamerLoopParallel(query_list=query_list, query_size=10)
 
 
 print("\n\nscript is FINISHED")
