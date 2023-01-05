@@ -35,8 +35,14 @@ print(f'Parallel Streamer Loop')
 query_list = ds.queryFields
 ds.runStreamerLoopParallel(query_list=query_list, query_size=13)
 
+# conver queryFields list to a list of strings
+# query_list = [str(field) for field in ds.queryFields]
+
+# maybe turn ds.queryFields and ds.queryStrs into a Streamer.dict var?
+print(ds.queryFields)
+print(ds.queryStrs)
+
+
+
 
 print("\n\nscript is FINISHED")
-
-# Why is there event/helperStore in filtered query list but not filtered schema list??
-
