@@ -8,15 +8,33 @@ ds = Streamer(endpoint)
 
 print(f'#1) - query fields: {ds.queryFields}')
 
+keys = ['timestamp_lt', 'assetPair']
+values = [1673800967, 'ETH/USD']
 
-search_eth = {'timestamp_lt': 1673800967, 'assetPair': "ETH/USD"}
-search_btc = {'timestamp_lt': 1673800967, 'assetPair': "BTC/USD"}
-
-df = ds.runQuery(ds.queryFields[0], where=search_eth, query_size=102)
-# df = ds.runQuery(ds.queryFields[0], query_size=102)
+search_list = ["ETH/USD", "BTC/USD", "LINK/USD", "UNI/USD"]
 
 
-print(df.head(5))
+dfs = ds.runSameQuerySearch(
+    fieldParam = ds.queryFields[0],
+    keys = keys, 
+    values = values,
+    searchKey = keys[1],
+    searchVals = search_list,
+    query_size = 101
+    )
 
+print(dfs)
+
+# parallel doesn't work, getting type error
+# dfs_parallel = ds.runStreamerSearchParallel(
+#     fieldParam = ds.queryFields[0],
+#     keys = keys, 
+#     values = values,
+#     searchKey = keys[1],
+#     searchVals = search_list,
+#     query_size = 101
+#     )
+
+# print(dfs_parallel)
 
 print('finished')

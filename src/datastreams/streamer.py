@@ -118,12 +118,22 @@ class Streamer:
         filtered_query_field_paths = [self.getFieldPath(field) for field in filtered_query_field_paths]
         return filtered_query_field_paths
 
-    def addSearchParam(self, query_field: FieldPath, search_param: dict, query_size = 10, orderDirection='desc') -> FieldPath:
+    # def makeSearchParam(self, keys=list, values=list) -> dict:
+    #     """
+    #     :param list keys: list of keys
+    #     :param list values: list of values
+    #     :return: dictionary of keys and values
+
+    #     makeSearchParam() is a helper function that makes a search parameter dictionary.
+    #     """
+    #     return dict(zip(keys, values))
+        
+    def addSearchParam(self, query_field: FieldPath, search_param: dict, query_size = 10, order_Direction: str ='desc') -> FieldPath:
         """
         :param FieldPath query_field: FieldPath object
         :param int query_size: number of query results to return. Default is 10.
         :param dict search_param: search parameter to add to query
-        :param str orderDirection: order direction for query. Default is 'desc'
+        :param str order_Direction: order direction for query. Default is 'desc'
         :return: FieldPath object
 
         addSearchParam() is a helper function that adds a search parameter to a query.
@@ -147,16 +157,57 @@ class Streamer:
             return df
         else:
             print(f'Search query for these params!: {where}')
-            query_field = self.addSearchParam(query_field, where, query_size=query_size, orderDirection='desc') # add where condition to query_field
+            query_field = self.addSearchParam(query_field, where, query_size=query_size) # add where condition to query_field
             df = self.sub.query_df(query_field)
             return df
 
+    def runSameQuerySearch(self, fieldParam: FieldPath, keys: list[str], values: list, searchKey: str, searchVals: list, query_size: int = 10) -> list[DataFrame]:
+        """
+        runSameQuerySearch() is a helper function that allows a user to search for multiple values for the same query field.
+        """
+        df_data = []
 
-    # def buildFunction(self):
-    #     """
-    #     Run multiple searches on a single FieldPath
-    #     """
+        search_dict = dict(zip(keys, values))
+        print(f'search_dict: {search_dict}') # debugging
 
+        # change the pair value to the search value
+        for val in searchVals:
+            print(f'val: {val}') # debugging
+            search_dict[searchKey] = val
+            df = self.runQuery(fieldParam, where=search_dict, query_size=query_size)
+            df_data.append(df)
+            print(val, df)
+
+        return df_data
+
+    def runStreamerSearchParallel(self, fieldParam: FieldPath, keys: list[str], values: list, searchKey: str, searchVals: list, cores: int = 4, query_size: int = 10) -> list[DataFrame]:
+        """
+        runStreamerSearchParallel is a parallelized version of runSameQuerySearch. Parameter input is the same.
+        """
+        search_dict = dict(zip(keys, values))
+
+        print(f'search_dict: {search_dict}') # debugging
+
+        # make query_list
+        query_list = []
+        for val in searchVals:
+            # update search_dict[searchKey] with new value
+            search_dict[searchKey] = val
+
+            # make a list of args for parallelization
+            print(f'search_dict: {search_dict[searchKey]}')
+            print(f'val: {val}') # debugging
+            query_list.append((fieldParam, search_dict, query_size))
+        # print(f'query_list: {query_list}') # debubbing
+
+        df_data = []
+        # Create a pool of 4 worker processes   
+        with concurrent.futures.ThreadPoolExecutor(max_workers=cores) as executor:
+            # Calculate the square of each number in parallel
+            for args in query_list:
+                future = executor.submit(self.runQuery, *args)
+                df_data.append(future.result())
+        return df_data
 
 
         
