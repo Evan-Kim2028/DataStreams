@@ -118,17 +118,18 @@ class Streamer:
         filtered_query_field_paths = [self.getFieldPath(field) for field in filtered_query_field_paths]
         return filtered_query_field_paths
 
-    def addSearchParam(self, query_field: FieldPath, search_param: dict, query_size = 10) -> FieldPath:
+    def addSearchParam(self, query_field: FieldPath, search_param: dict, query_size = 10, orderDirection='desc') -> FieldPath:
         """
         :param FieldPath query_field: FieldPath object
         :param int query_size: number of query results to return. Default is 10.
         :param dict search_param: search parameter to add to query
+        :param str orderDirection: order direction for query. Default is 'desc'
         :return: FieldPath object
 
         addSearchParam() is a helper function that adds a search parameter to a query.
         """
 
-        return query_field(first=query_size, where=search_param)
+        return query_field(first=query_size, where=search_param, orderDirection='desc')
 
     def runQuery(self, query_field: FieldPath, query_size: int=4, where=None) -> DataFrame:
         """
@@ -146,7 +147,7 @@ class Streamer:
             return df
         else:
             print(f'Search query for these params!: {where}')
-            query_field = self.addSearchParam(query_field, where, query_size=query_size) # add where condition to query_field
+            query_field = self.addSearchParam(query_field, where, query_size=query_size, orderDirection='desc') # add where condition to query_field
             df = self.sub.query_df(query_field)
             return df
 
