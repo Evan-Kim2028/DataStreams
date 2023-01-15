@@ -54,4 +54,5 @@ MANIFEST
 .venv*/
 .conda*/
 .python-version
+/ds*
 examples/cow_grant_streamer.ipynb

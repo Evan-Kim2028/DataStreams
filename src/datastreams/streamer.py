@@ -118,23 +118,48 @@ class Streamer:
         filtered_query_field_paths = [self.getFieldPath(field) for field in filtered_query_field_paths]
         return filtered_query_field_paths
 
-    def runQuery(self, query_field: FieldPath, query_size: int=4) -> DataFrame:
+    def addSearchParam(self, query_field: FieldPath, search_param: dict, query_size = 10) -> FieldPath:
+        """
+        :param FieldPath query_field: FieldPath object
+        :param int query_size: number of query results to return. Default is 10.
+        :param dict search_param: search parameter to add to query
+        :return: FieldPath object
+
+        addSearchParam() is a helper function that adds a search parameter to a query.
+        """
+
+        return query_field(first=query_size, where=search_param)
+
+    def runQuery(self, query_field: FieldPath, query_size: int=4, where=None) -> DataFrame:
         """
         :param FieldPath query_field: FieldPath object
         :param int query_size: number of query results to return. Default is 4.
+        :param dict where: where is a dictionary conditional that specifies query searches. Default is None.
         :return: DataFrame object
 
         setupQuery() is a helper function that returns a DataFrame object for a query.
         """
         print(f'FIELD - {query_field}')
 
-        # 2) Run query
-        df = self.sub.query_df(query_field(first=query_size))
+        if where == None:
+            df = self.sub.query_df(query_field(query_size=query_size))
+            return df
+        else:
+            print(f'Search query for these params!: {where}')
+            query_field = self.addSearchParam(query_field, where, query_size=query_size) # add where condition to query_field
+            df = self.sub.query_df(query_field)
+            return df
+
+
+    # def buildFunction(self):
+    #     """
+    #     Run multiple searches on a single FieldPath
+    #     """
+
+
+
         
-        return df
-
-
-    def runStreamerLoop(self, query_size: int = 10) -> list[DataFrame]:
+    def runStreamerLoop(self, query_size: int = 10, where=None) -> list[DataFrame]:
         """
         *SOFT DEPRECATION* - use runStreamerLoopParallel() instead. This function is left in for legacy purposes.
 
@@ -153,6 +178,7 @@ class Streamer:
             df_data.append(df)
         # end time
         end_time = time.time() - start_time
+        
         print(f'{len(self.queryFields)} queries, single core: {end_time:.2f} seconds. Largest df is {len(max(df_data, key=len))}\n')
         return df_data
 
