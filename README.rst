@@ -41,6 +41,11 @@ Installation
 ============
 Install via `pip install git+https://github.com/Evan-Kim2028/DataStreams.git
     
+Examples
+========
+Find current notebook examples in the `examples`_ folder.
+
+.. _examples: https://github.com/Evan-Kim2028/DataStreams/tree/master/examples
 
 Documentation
 =============
