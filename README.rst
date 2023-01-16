@@ -11,8 +11,13 @@ It provides extended functionality on top of The Graph data access package `Subg
 
 The overarching goals of DataStreams are the following:
 - provide a DRY experience for developers to manage subgraph queries
-- batch support for subgraph queries
-- provide an interface to query search across multiple Subgraph nodes simultaneously
+- batch support for subgraph query searches
+- provide parallelization for subgraph query exeuction
+- provide an interface to query search across multiple Subgraph nodes simultaneously (WIP)
+
+The main class in DataStreams is called 'Streamer'. `Streamer`_. `Streamer`_ stores a Subgraph schema information
+and provides an interface to easily construct and execute Subgraph queries. 
+
 
 .. _Subgrounds: https://github.com/Protean-Labs/subgrounds
 
@@ -34,11 +39,11 @@ DataStream also requires:
 
 Installation
 ============
-Install via `pip install git+https://github.com/Evan-Kim2028/DataStreams.git`
+Install via `pip install git+https://github.com/Evan-Kim2028/DataStreams.git
     
 
 Documentation
 =============
-Find `full documentation here`_.
+Find a `work in progress documentation here`_.
 
-.. _full documentation here: https://datastreams-subgraph.readthedocs.io/en/latest/
+.. _work in progress documentation here: https://datastreams-subgraph.readthedocs.io/en/latest/

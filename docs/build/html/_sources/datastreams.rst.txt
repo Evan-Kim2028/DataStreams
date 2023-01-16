@@ -13,14 +13,15 @@ The ``Streamer`` class
 ---------------------------
 
 .. autoclass:: datastreams.streamer.Streamer
+   :show-inheritance:
    :members:
    :undoc-members:
-   :show-inheritance:
+
 
 The ``DataStream`` class
 -----------------------------
 
 .. autoclass:: datastreams.datastream.DataStream
+   :show-inheritance:
    :members:
    :undoc-members:
-   :show-inheritance:

@@ -13,11 +13,25 @@ author = '0xEvan'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.todo', 'sphinx.ext.viewcode', 'sphinx.ext.autodoc', 'sphinx_rtd_theme']
+extensions = [
+    'sphinx.ext.todo', 
+    'sphinx.ext.viewcode', 
+    'sphinx.ext.duration', 
+    'sphinx.ext.doctest',
+    'sphinx.ext.autodoc', 
+    'sphinx_rtd_theme', 
+    'sphinx.ext.autosummary', 
+    'sphinx_autodoc_defaultargs']
+
+autodoc_modules = ['mypackage.*']
+autodoc_class_members = ['Streamer', 'DataStream']
+autodoc_member_order = 'bysource'
+autodoc_typehints = 'description'
+
 
 templates_path = ['_templates']
-exclude_patterns = []
 
+napoleon_include_init_with_doc = False
 
 
 # -- Options for HTML output -------------------------------------------------

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>datastreams.datastream &mdash; DataStreams  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> DataStreams
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Intro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../datastreams.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">DataStreams Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DataStreams</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">datastreams.datastream</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for datastreams.datastream</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">datastreams.streamer</span> <span class="kn">import</span> <span class="n">Streamer</span>
+
+<span class="kn">from</span> <span class="nn">subgrounds.subgrounds</span> <span class="kn">import</span> <span class="n">Subgrounds</span>
+<span class="kn">from</span> <span class="nn">subgrounds.subgraph.subgraph</span> <span class="kn">import</span> <span class="n">Subgraph</span>
+
+<div class="viewcode-block" id="DataStream"><a class="viewcode-back" href="../../datastreams.html#datastreams.datastream.DataStream">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">DataStream</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Use DataStream to interface with the Streamer class. Future direction of the class is undecided. </span>
+<span class="sd">    The only benefit is abstracting away the execution layer from Streamer class. </span>
+
+<span class="sd">    Tentatively DataStream should store execution functionality whereas Streamer will store</span>
+<span class="sd">    the subgraph interface functionality. </span>
+
+<span class="sd">    Additionally, Streamer should only interact with a single endpoint whereas DataStream can interact </span>
+<span class="sd">    multiple endpoints.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Subgrounds is unique for every DataStream?</span>
+<div class="viewcode-block" id="DataStream.getDataStream"><a class="viewcode-back" href="../../datastreams.html#datastreams.datastream.DataStream.getDataStream">[docs]</a>    <span class="k">def</span> <span class="nf">getDataStream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">query_size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param str endpoint: graphql endpoint</span>
+<span class="sd">        :param int query_size: number of queries to run. Default is 5.</span>
+
+
+<span class="sd">        getDataStream is a firehose that returns all data from a subgraph endpoint.</span>
+<span class="sd">        Should query_size, a graphQl parameter be contained in this function? Or moved somewhere else</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># create new Subgrounds object</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">Subgrounds</span><span class="p">()</span>
+        <span class="c1"># load subgraph data into Subgrounds</span>
+        <span class="n">subgraph</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">load_subgraph</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+
+        <span class="c1"># load Subgrounds data into Streamer</span>
+        <span class="n">streamer</span> <span class="o">=</span> <span class="n">Streamer</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">subgraph</span><span class="p">)</span>
+
+        <span class="c1"># run Streamer. By default runStreamer is a firehose.</span>
+        <span class="n">streamer</span><span class="o">.</span><span class="n">runStreamer</span><span class="p">(</span><span class="n">query_size</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, 0xEvan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
