@@ -39,7 +39,7 @@ DataStream also requires:
 
 Installation
 ============
-Install via `pip install git+https://github.com/Evan-Kim2028/DataStreams.git
+Install via `pip install git+https://github.com/Evan-Kim2028/DataStreams.git`
     
 Examples
 ========
