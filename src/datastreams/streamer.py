@@ -165,11 +165,11 @@ class Streamer:
         print(f'FIELD - {query_field}')
 
         if where == None:
-            df = self.sub.query_df(query_field(query_size=query_size))
+            df = self.sub.query_df(query_field(first=query_size))
             return df
         else:
-            print(f'Search query for these params!: {where}')
-            query_field = self.addSearchParam(query_field, where, query_size=query_size) # add where condition to query_field
+            print(f'Filter based on these values: {where}')
+            query_field = self.addSearchParam(query_field, where, first=query_size) # add where condition to query_field
             df = self.sub.query_df(query_field)
             return df
 
