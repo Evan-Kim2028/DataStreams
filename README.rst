@@ -6,8 +6,13 @@
 ===========
 DataStreams
 ===========
-DataStream a Subgraph query utility package that allows users to execute more complex GraphQL queries. 
+DataStreams a Subgraph query utility package that allows users to execute more complex GraphQL queries. 
 It provides extended functionality on top of The Graph data access package `Subgrounds`_.
+
+The overarching goals of DataStreams are the following:
+- provide a DRY experience for developers to manage subgraph queries
+- batch support for subgraph queries
+- provide an interface to query search across multiple Subgraph nodes simultaneously
 
 .. _Subgrounds: https://github.com/Protean-Labs/subgrounds
 
