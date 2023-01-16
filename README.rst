@@ -20,7 +20,7 @@ and provides an interface to easily construct and execute Subgraph queries.
 
 
 .. _Subgrounds: https://github.com/Protean-Labs/subgrounds
-
+.. _Streamer: https://datastreams-subgraph.readthedocs.io/en/latest/api.html#datastreams.streamer.Streamer
 
 
 .. _pyscaffold-notes:
