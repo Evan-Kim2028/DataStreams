@@ -20,6 +20,7 @@ The overarching goals of DataStreams are the following:
 
 .. _pyscaffold-notes:
 
+
 Dependencies and Setup
 ======================
 Since DataStream uses Subgrounds, Python 3.10 is required.
@@ -30,10 +31,12 @@ DataStream also requires:
 * Subgrounds (>= 1.0.3)
 * Pandas (>= 1.5.0)
 
+
 Installation
 ============
 Install via `pip install git+https://github.com/Evan-Kim2028/DataStreams.git`
     
+
 Documentation
 =============
 Find `full documentation here`_.

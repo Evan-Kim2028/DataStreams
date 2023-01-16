@@ -46,7 +46,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="datastreams.html">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">DataStreams Examples</a></li>
 </ul>
 
         </div>
@@ -75,7 +75,12 @@
              
   <section id="intro">
 <h1>Intro<a class="headerlink" href="#intro" title="Permalink to this heading"></a></h1>
-<p>DataStream a package that lets user build GraphQL DAG queries out of Subgraph data. It provides extended functionality on top of The Graph data access package [Subgrounds](<a class="reference external" href="https://github.com/Protean-Labs/subgrounds">https://github.com/Protean-Labs/subgrounds</a>).</p>
+<p>DataStreams a Subgraph query utility package that allows users to execute more complex GraphQL queries.
+It provides extended functionality on top of The Graph data access package <a class="reference external" href="https://github.com/Protean-Labs/subgrounds">Subgrounds</a>.</p>
+<p>The overarching goals of DataStreams are the following:
+- provide a DRY experience for developers to manage subgraph queries
+- batch support for subgraph queries
+- provide an interface to query search across multiple Subgraph nodes simultaneously</p>
 <section id="dependencies-and-setup">
 <h2>Dependencies and Setup<a class="headerlink" href="#dependencies-and-setup" title="Permalink to this heading"></a></h2>
 <p>Since DataStream uses Subgrounds, Python 3.10 is required.</p>

@@ -17,10 +17,11 @@ class Streamer:
     :param Subgrounds sub: Subgrounds object. Default is `None`
     :param str endpoint: graphql endpoint. Default is `None`
     :param Subgraph subgraph: Subgraph object. Default is `None`
-    :param list data_list: list of dataframes. Default is `None`
+    :param list data: list of dataframes. Default is `None`
     :param list schema: list of schema objects. Default is `None`
     :param list queryFields: list of queryable fields. Default is `None`
     :param list queryStrs: list of query strings. Default is `None`
+    :param dict queryDict: dictionary of query strings. Default is `None`
 
 
     Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. 
@@ -29,10 +30,6 @@ class Streamer:
     
     Introducing these helper functions allows Streamer to queue up multiple queries of different parts of a schema at once. 
     The data flow can be described as follows:
-
-    #. Load Subgraph -  Load the schema field list from a graphql endpoint. The field list loaded defaults to the 'Query' schema. 
-    #. Define Query Path - Streamer allows you to define a query path and queue up multiple queries of different parts of the schema at once.
-    #. The query path is defined automatically to run every possible query on the subgraph and returns a list of dataframes.
     """
 
     endpoint: str = None
@@ -105,9 +102,9 @@ class Streamer:
 
     def filterQueryFieldStrs(self) -> list[str]:
         """
-        :return: list[str] of queryable fields that end with an 's'
+        :return: list[str] of queryable fields
 
-        Filter fields that end with an 's'
+        filterQueryFieldStrs() is an inner helper function run at startup that stores a str representation of the queryable fields.
         """
         # get query field list
         query_field_paths = self.getQueryFields()
@@ -121,9 +118,9 @@ class Streamer:
 
     def filterQueryFields(self) -> list[FieldPath]:
         """
-        :return: list[FieldPath] of queryable fields that end with an 's'
+        :return: list[FieldPath] of queryable fields
 
-        Filter fields that end with an 's'
+        filterQueryFields() is an inner helper function run at startup that stores a FieldPath representation of the queryable fields.
         """
         # convert str -> FieldPath
         filtered_field_paths= [self.getFieldPath(field) for field in self.queryStrs]
@@ -132,9 +129,10 @@ class Streamer:
 
     def getQueryDict(self):
         """
-        :return: dict of queryable fields that end with an 's'
+        :return: dict of queryable fields in {str: FieldPath} format
 
-        Filter fields that end with an 's'
+        getQueryDict() is an inner helper function run at startup that stores a dictionary of queryable fields in {str: FieldPath} format. 
+        This function allows the subgraph schema to be searchable by dictionary keys.
         """
         query_dict = dict(zip(self.queryStrs, self.queryFields))
 
@@ -148,7 +146,7 @@ class Streamer:
         :param str order_Direction: order direction for query. Default is 'desc'
         :return: FieldPath object
 
-        addSearchParam() is a helper function that adds a search parameter to a query.
+        addSearchParam() adds an optional search parameter to a Subgraph query.
         """
 
         return query_field(first=query_size, where=search_param, orderDirection='desc')
@@ -160,10 +158,9 @@ class Streamer:
         :param dict where: where is a dictionary conditional that specifies query searches. Default is None.
         :return: DataFrame object
 
-        setupQuery() is a helper function that returns a DataFrame object for a query.
+        setupQuery() returns a DataFrame object from a Subgraph query.
         """
         print(f'FIELD - {query_field}')
-
         if where == None:
             df = self.sub.query_df(query_field(first=query_size))
             return df
@@ -175,7 +172,15 @@ class Streamer:
 
     def runSameQuerySearch(self, fieldParam: FieldPath, keys: list[str], values: list, searchKey: str, searchVals: list, query_size: int = 10) -> list[DataFrame]:
         """
-        runSameQuerySearch() is a helper function that allows a user to search for multiple values for the same query field.
+        :param FieldPath fieldParam: FieldPath object
+        :param list[str] keys: list of keys to search
+        :param list values: list of values to search
+        :param str searchKey: key to search for
+        :param list searchVals: list of values to search for
+        :param int query_size: number of query results to return. Default is 10.
+        :return: list[DataFrame] object
+
+        runSameQuerySearch() allows a user to search for multiple values within the same query field schema.
         """
         df_data = []
 
@@ -221,16 +226,14 @@ class Streamer:
                 df_data.append(future.result())
         return df_data
 
-
-        
     def runStreamerLoop(self, query_field_list: list[FieldPath], query_size: int = 10, where=None) -> list[DataFrame]:
         """
-        *SOFT DEPRECATION* - use runStreamerLoopParallel() instead. This function is left in for legacy purposes.
-
+        :param list[FieldPath] query_field_list: list of FieldPath objects
         :param int query_size: number of query results to return. Default is 10.
         :return: list of dataframes
 
-        runStreamer() runs through ALL queryable fields list and returns a list of query dataframes. 
+        *SOFT DEPRECATION* - use runStreamerLoopParallel() instead. This function is left in for legacy purposes.
+        runStreamer() runs through a list of queryable fields list and returns a list of Subgraph query dataframes. 
         """
         # create empty dictionary to store query data
         df_data = []
@@ -257,7 +260,9 @@ class Streamer:
         :param int cores: number of cores to use. Default is 4.
         :return: list of dataframes
 
-        runStreamer() runs through ALL queryable fields list and returns a list of query dataframes.
+        runStreamerLoopParallel() runs through a list of queryable fields and returns a list of Subgraph query dataframes.
+        
+        NOTE - This function does not support parallelized search filter queries.
         """
         # create a list of tuples between query_size and query_list
         query_list = [(query, query_size) for query in query_list]

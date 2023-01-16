@@ -40,7 +40,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Intro</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datastreams.html">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">DataStreams Examples</a></li>
 </ul>
 
         </div>
@@ -70,15 +70,25 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#D"><strong>D</strong></a>
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  
 </div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.addSearchParam">addSearchParam() (datastreams.streamer.Streamer method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -109,11 +119,11 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="datastreams.html#datastreams.streamer.Streamer.filterSchemaFields">filterSchemaFields() (datastreams.streamer.Streamer method)</a>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.filterQueryFields">filterQueryFields() (datastreams.streamer.Streamer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="datastreams.html#datastreams.streamer.Streamer.formatFieldStr">formatFieldStr() (datastreams.streamer.Streamer method)</a>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.filterQueryFieldStrs">filterQueryFieldStrs() (datastreams.streamer.Streamer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -125,11 +135,13 @@
 </li>
       <li><a href="datastreams.html#datastreams.streamer.Streamer.getFieldPath">getFieldPath() (datastreams.streamer.Streamer method)</a>
 </li>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.getQueryDict">getQueryDict() (datastreams.streamer.Streamer method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="datastreams.html#datastreams.streamer.Streamer.getSchemaFields">getSchemaFields() (datastreams.streamer.Streamer method)</a>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.getQueryFields">getQueryFields() (datastreams.streamer.Streamer method)</a>
 </li>
-      <li><a href="datastreams.html#datastreams.streamer.Streamer.getSchemaQueryFields">getSchemaQueryFields() (datastreams.streamer.Streamer method)</a>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.getSchemaFields">getSchemaFields() (datastreams.streamer.Streamer method)</a>
 </li>
       <li><a href="datastreams.html#datastreams.streamer.Streamer.getSubgraphSchema">getSubgraphSchema() (datastreams.streamer.Streamer method)</a>
 </li>
@@ -149,10 +161,34 @@
   </ul></td>
 </tr></table>
 
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.queryDict">queryDict (datastreams.streamer.Streamer attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.queryFields">queryFields (datastreams.streamer.Streamer attribute)</a>
+</li>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.queryStrs">queryStrs (datastreams.streamer.Streamer attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="datastreams.html#datastreams.streamer.Streamer.runStreamer">runStreamer() (datastreams.streamer.Streamer method)</a>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.runQuery">runQuery() (datastreams.streamer.Streamer method)</a>
+</li>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.runSameQuerySearch">runSameQuerySearch() (datastreams.streamer.Streamer method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.runStreamerLoop">runStreamerLoop() (datastreams.streamer.Streamer method)</a>
+</li>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.runStreamerLoopParallel">runStreamerLoopParallel() (datastreams.streamer.Streamer method)</a>
+</li>
+      <li><a href="datastreams.html#datastreams.streamer.Streamer.runStreamerSearchParallel">runStreamerSearchParallel() (datastreams.streamer.Streamer method)</a>
 </li>
   </ul></td>
 </tr></table>

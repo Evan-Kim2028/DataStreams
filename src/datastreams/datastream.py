@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from datastreams.streamer import Streamer
 
 from subgrounds.subgrounds import Subgrounds
-from subgrounds.subgraph.subgraph import Subgraph
 
 @dataclass
 class DataStream:
     """
+    ** CURRENTLY BEING BUILT. NOT USABLE YET **
     Use DataStream to interface with the Streamer class. Future direction of the class is undecided. 
     The only benefit is abstracting away the execution layer from Streamer class. 
 
