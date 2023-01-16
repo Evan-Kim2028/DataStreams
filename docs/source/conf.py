@@ -20,8 +20,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.autodoc', 
     'sphinx_rtd_theme', 
-    'sphinx.ext.autosummary', 
-    'sphinx_autodoc_defaultargs']
+    'sphinx.ext.autosummary']
 
 autodoc_modules = ['mypackage.*']
 autodoc_class_members = ['Streamer', 'DataStream']

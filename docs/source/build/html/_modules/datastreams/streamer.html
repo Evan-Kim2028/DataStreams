@@ -84,25 +84,18 @@
 <div class="viewcode-block" id="Streamer"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Streamer</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. </span>
+<span class="sd">    Streamer makes it easier to define query paths by introducing helper functions that expose commonly used </span>
+<span class="sd">    Subgrounds functions. Each Streamer relates  to a single subgraph. Introducing these helper functions allows Streamer to queue up multiple queries of different parts of a schema at once. </span>
+
 <span class="sd">    :param Subgrounds sub: Subgrounds object. Default is `None`</span>
 <span class="sd">    :param str endpoint: graphql endpoint. Default is `None`</span>
 <span class="sd">    :param Subgraph subgraph: Subgraph object. Default is `None`</span>
-<span class="sd">    :param list data_list: list of dataframes. Default is `None`</span>
+<span class="sd">    :param list data: list of dataframes. Default is `None`</span>
 <span class="sd">    :param list schema: list of schema objects. Default is `None`</span>
 <span class="sd">    :param list queryFields: list of queryable fields. Default is `None`</span>
 <span class="sd">    :param list queryStrs: list of query strings. Default is `None`</span>
-
-
-<span class="sd">    Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. </span>
-<span class="sd">    Streamer makes it easier to define query paths by introducing helper functions that expose commonly used </span>
-<span class="sd">    Subgrounds functions. Each Streamer relates  to a single subgraph.</span>
-<span class="sd">    </span>
-<span class="sd">    Introducing these helper functions allows Streamer to queue up multiple queries of different parts of a schema at once. </span>
-<span class="sd">    The data flow can be described as follows:</span>
-
-<span class="sd">    #. Load Subgraph -  Load the schema field list from a graphql endpoint. The field list loaded defaults to the &#39;Query&#39; schema. </span>
-<span class="sd">    #. Define Query Path - Streamer allows you to define a query path and queue up multiple queries of different parts of the schema at once.</span>
-<span class="sd">    #. The query path is defined automatically to run every possible query on the subgraph and returns a list of dataframes.</span>
+<span class="sd">    :param dict queryDict: dictionary of query strings. Default is `None`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
@@ -134,39 +127,37 @@
 
 <div class="viewcode-block" id="Streamer.getFieldPath"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getFieldPath">[docs]</a>    <span class="k">def</span> <span class="nf">getFieldPath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s1">&#39;Query&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldPath</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        getFieldPath converts a string to a FieldPath object. In a Subgrounds query, the format follows subgrounds.schema.FieldPath.</span>
+
 <span class="sd">        :param str field: Enter the string that will be converted to a FieldPath</span>
 <span class="sd">        :param str operation: Enter one of the following - &#39;Query&#39;, &#39;Mutation&#39;, or &#39;Subscription&#39;. Default is &#39;Query&#39; because that is most commonly used. </span>
 <span class="sd">        :return: FieldPath object</span>
-
-
-<span class="sd">        getFieldPath converts a string to a FieldPath object. In a Subgrounds query, the format follows subgrounds.schema.FieldPath.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">field</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Streamer.getSubgraphSchema"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getSubgraphSchema">[docs]</a>    <span class="k">def</span> <span class="nf">getSubgraphSchema</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: schema list from a Subgraph</span>
-
-
 <span class="sd">        getSubgraphSchema gets the schema list from a Subgraph.</span>
+
+<span class="sd">        :return: schema list from a Subgraph</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">type_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="o">.</span><span class="n">_schema</span><span class="o">.</span><span class="n">type_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">type_</span><span class="o">.</span><span class="n">is_object</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Streamer.getSchemaFields"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getSchemaFields">[docs]</a>    <span class="k">def</span> <span class="nf">getSchemaFields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_object</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        getSubgraphField gets a fields list from a subgraph schema.</span>
+
 <span class="sd">        :param str schema_object: Schema object name to get fields list from</span>
 <span class="sd">        :param str operation: Enter one of the following - &#39;Query&#39;, &#39;Mutation&#39;, or &#39;Subscription&#39;. Default is &#39;Query&#39; because that is most commonly used.</span>
 <span class="sd">        :return: strings field list from a Subgraph schema</span>
-
-<span class="sd">        getSubgraphField gets a fields list from a subgraph schema.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">schema_object</span><span class="p">)</span><span class="o">.</span><span class="n">_object</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Streamer.getQueryFields"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getQueryFields">[docs]</a>    <span class="k">def</span> <span class="nf">getQueryFields</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list[str] of queryable fields from the subgraph schema</span>
-
 <span class="sd">        Get all queryable fields from the subgraph schema.</span>
+
+<span class="sd">        :return: list[str] of queryable fields from the subgraph schema</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">query_field_paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSchemaFields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;Query&#39;</span><span class="p">)])</span>
         <span class="c1"># print(f&#39;query field paths for this {len(query_field_paths)} length schema are {query_field_paths}&#39;)</span>
@@ -175,9 +166,9 @@
 
 <div class="viewcode-block" id="Streamer.filterQueryFieldStrs"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.filterQueryFieldStrs">[docs]</a>    <span class="k">def</span> <span class="nf">filterQueryFieldStrs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list[str] of queryable fields that end with an &#39;s&#39;</span>
+<span class="sd">        filterQueryFieldStrs() is an inner helper function run at startup that stores a str representation of the queryable fields.</span>
 
-<span class="sd">        Filter fields that end with an &#39;s&#39;</span>
+<span class="sd">        :return: list[str] of queryable fields</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># get query field list</span>
         <span class="n">query_field_paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQueryFields</span><span class="p">()</span>
@@ -191,9 +182,9 @@
 
 <div class="viewcode-block" id="Streamer.filterQueryFields"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.filterQueryFields">[docs]</a>    <span class="k">def</span> <span class="nf">filterQueryFields</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">FieldPath</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list[FieldPath] of queryable fields that end with an &#39;s&#39;</span>
+<span class="sd">        filterQueryFields() is an inner helper function run at startup that stores a FieldPath representation of the queryable fields.</span>
 
-<span class="sd">        Filter fields that end with an &#39;s&#39;</span>
+<span class="sd">        :return: list[FieldPath] of queryable fields</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># convert str -&gt; FieldPath</span>
         <span class="n">filtered_field_paths</span><span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">getFieldPath</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryStrs</span><span class="p">]</span>
@@ -202,9 +193,10 @@
 
 <div class="viewcode-block" id="Streamer.getQueryDict"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.getQueryDict">[docs]</a>    <span class="k">def</span> <span class="nf">getQueryDict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: dict of queryable fields that end with an &#39;s&#39;</span>
+<span class="sd">        getQueryDict() is an inner helper function run at startup that stores a dictionary of queryable fields in {str: FieldPath} format. </span>
+<span class="sd">        This function allows the subgraph schema to be searchable by dictionary keys.</span>
 
-<span class="sd">        Filter fields that end with an &#39;s&#39;</span>
+<span class="sd">        :return: dict of queryable fields in {str: FieldPath} format</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">query_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queryStrs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryFields</span><span class="p">))</span>
 
@@ -212,28 +204,27 @@
         
 <div class="viewcode-block" id="Streamer.addSearchParam"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.addSearchParam">[docs]</a>    <span class="k">def</span> <span class="nf">addSearchParam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_field</span><span class="p">:</span> <span class="n">FieldPath</span><span class="p">,</span> <span class="n">search_param</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">query_size</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">order_Direction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s1">&#39;desc&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldPath</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        addSearchParam() adds an optional search parameter to a Subgraph query.</span>
+
 <span class="sd">        :param FieldPath query_field: FieldPath object</span>
 <span class="sd">        :param int query_size: number of query results to return. Default is 10.</span>
 <span class="sd">        :param dict search_param: search parameter to add to query</span>
 <span class="sd">        :param str order_Direction: order direction for query. Default is &#39;desc&#39;</span>
 <span class="sd">        :return: FieldPath object</span>
-
-<span class="sd">        addSearchParam() is a helper function that adds a search parameter to a query.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">query_field</span><span class="p">(</span><span class="n">first</span><span class="o">=</span><span class="n">query_size</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">search_param</span><span class="p">,</span> <span class="n">orderDirection</span><span class="o">=</span><span class="s1">&#39;desc&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Streamer.runQuery"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.runQuery">[docs]</a>    <span class="k">def</span> <span class="nf">runQuery</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_field</span><span class="p">:</span> <span class="n">FieldPath</span><span class="p">,</span> <span class="n">query_size</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        setupQuery() returns a DataFrame object from a Subgraph query.</span>
+
 <span class="sd">        :param FieldPath query_field: FieldPath object</span>
 <span class="sd">        :param int query_size: number of query results to return. Default is 4.</span>
 <span class="sd">        :param dict where: where is a dictionary conditional that specifies query searches. Default is None.</span>
 <span class="sd">        :return: DataFrame object</span>
-
-<span class="sd">        setupQuery() is a helper function that returns a DataFrame object for a query.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;FIELD - </span><span class="si">{</span><span class="n">query_field</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">where</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="o">.</span><span class="n">query_df</span><span class="p">(</span><span class="n">query_field</span><span class="p">(</span><span class="n">first</span><span class="o">=</span><span class="n">query_size</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">df</span>
@@ -245,7 +236,15 @@
 
 <div class="viewcode-block" id="Streamer.runSameQuerySearch"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.runSameQuerySearch">[docs]</a>    <span class="k">def</span> <span class="nf">runSameQuerySearch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fieldParam</span><span class="p">:</span> <span class="n">FieldPath</span><span class="p">,</span> <span class="n">keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">searchKey</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">searchVals</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">query_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        runSameQuerySearch() is a helper function that allows a user to search for multiple values for the same query field.</span>
+<span class="sd">        runSameQuerySearch() allows a user to search for multiple values within the same query field schema.</span>
+
+<span class="sd">        :param FieldPath fieldParam: FieldPath object</span>
+<span class="sd">        :param list[str] keys: list of keys to search</span>
+<span class="sd">        :param list values: list of values to search</span>
+<span class="sd">        :param str searchKey: key to search for</span>
+<span class="sd">        :param list searchVals: list of values to search for</span>
+<span class="sd">        :param int query_size: number of query results to return. Default is 10.</span>
+<span class="sd">        :return: list[DataFrame] object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">df_data</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -265,6 +264,15 @@
 <div class="viewcode-block" id="Streamer.runStreamerSearchParallel"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.runStreamerSearchParallel">[docs]</a>    <span class="k">def</span> <span class="nf">runStreamerSearchParallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fieldParam</span><span class="p">:</span> <span class="n">FieldPath</span><span class="p">,</span> <span class="n">keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">searchKey</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">searchVals</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">cores</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">query_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        runStreamerSearchParallel is a parallelized version of runSameQuerySearch. Parameter input is the same.</span>
+
+<span class="sd">        :param FieldPath fieldParam: FieldPath object</span>
+<span class="sd">        :param list[str] keys: list of keys to search</span>
+<span class="sd">        :param list values: list of values to search</span>
+<span class="sd">        :param str searchKey: key to search for</span>
+<span class="sd">        :param list searchVals: list of values to search for</span>
+<span class="sd">        :param int cores: number of cores to use for parallelization. Default is 4.</span>
+<span class="sd">        :param int query_size: number of query results to return. Default is 10.</span>
+<span class="sd">        :return: list[DataFrame] object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">search_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
 
@@ -291,16 +299,15 @@
                 <span class="n">df_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">df_data</span></div>
 
-
-        
 <div class="viewcode-block" id="Streamer.runStreamerLoop"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.runStreamerLoop">[docs]</a>    <span class="k">def</span> <span class="nf">runStreamerLoop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_field_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FieldPath</span><span class="p">],</span> <span class="n">query_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        *SOFT DEPRECATION* - use runStreamerLoopParallel() instead. This function is left in for legacy purposes.</span>
+<span class="sd">        runStreamer() runs through a list of queryable fields list and returns a list of Subgraph query dataframes. </span>
 
+<span class="sd">        :param list[FieldPath] query_field_list: list of FieldPath objects</span>
 <span class="sd">        :param int query_size: number of query results to return. Default is 10.</span>
+<span class="sd">        :param dict where: where is a dictionary conditional that specifies query searches. Default is None.</span>
 <span class="sd">        :return: list of dataframes</span>
-
-<span class="sd">        runStreamer() runs through ALL queryable fields list and returns a list of query dataframes. </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># create empty dictionary to store query data</span>
         <span class="n">df_data</span> <span class="o">=</span> <span class="p">[]</span>
@@ -322,12 +329,14 @@
 
 <div class="viewcode-block" id="Streamer.runStreamerLoopParallel"><a class="viewcode-back" href="../../datastreams.html#datastreams.streamer.Streamer.runStreamerLoopParallel">[docs]</a>    <span class="k">def</span> <span class="nf">runStreamerLoopParallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FieldPath</span><span class="p">],</span> <span class="n">query_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">cores</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        runStreamerLoopParallel() runs through a list of queryable fields and returns a list of Subgraph query dataframes.</span>
+
+<span class="sd">        NOTE - This function does not support parallelized search filter queries.</span>
+
 <span class="sd">        :param list[FieldPath] query_list: list of FieldPath objects</span>
 <span class="sd">        :param int query_size: number of query results to return. Default is 10.</span>
 <span class="sd">        :param int cores: number of cores to use. Default is 4.</span>
 <span class="sd">        :return: list of dataframes</span>
-
-<span class="sd">        runStreamer() runs through ALL queryable fields list and returns a list of query dataframes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># create a list of tuples between query_size and query_list</span>
         <span class="n">query_list</span> <span class="o">=</span> <span class="p">[(</span><span class="n">query</span><span class="p">,</span> <span class="n">query_size</span><span class="p">)</span> <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">query_list</span><span class="p">]</span>

@@ -119,31 +119,23 @@
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datastreams.streamer.</span></span><span class="sig-name descname"><span class="pre">Streamer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryFields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryStrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryDict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. 
+Streamer makes it easier to define query paths by introducing helper functions that expose commonly used 
+Subgrounds functions. Each Streamer relates  to a single subgraph. Introducing these helper functions allows Streamer to queue up multiple queries of different parts of a schema at once.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sub</strong> (<em>Subgrounds</em>) – Subgrounds object. Default is <cite>None</cite></p></li>
 <li><p><strong>endpoint</strong> (<em>str</em>) – graphql endpoint. Default is <cite>None</cite></p></li>
 <li><p><strong>subgraph</strong> (<em>Subgraph</em>) – Subgraph object. Default is <cite>None</cite></p></li>
-<li><p><strong>data_list</strong> (<em>list</em>) – list of dataframes. Default is <cite>None</cite></p></li>
+<li><p><strong>data</strong> (<em>list</em>) – list of dataframes. Default is <cite>None</cite></p></li>
 <li><p><strong>schema</strong> (<em>list</em>) – list of schema objects. Default is <cite>None</cite></p></li>
 <li><p><strong>queryFields</strong> (<em>list</em>) – list of queryable fields. Default is <cite>None</cite></p></li>
 <li><p><strong>queryStrs</strong> (<em>list</em>) – list of query strings. Default is <cite>None</cite></p></li>
-<li><p><strong>data</strong> (<em>list</em>) – </p></li>
-<li><p><strong>queryDict</strong> (<em>dict</em>) – </p></li>
+<li><p><strong>queryDict</strong> (<em>dict</em>) – dictionary of query strings. Default is <cite>None</cite></p></li>
 </ul>
 </dd>
 </dl>
-<p>Streamer is a query utility class that makes queries easier to define and build queries using Subgrounds functions. 
-Streamer makes it easier to define query paths by introducing helper functions that expose commonly used 
-Subgrounds functions. Each Streamer relates  to a single subgraph.</p>
-<p>Introducing these helper functions allows Streamer to queue up multiple queries of different parts of a schema at once. 
-The data flow can be described as follows:</p>
-<ol class="arabic simple">
-<li><p>Load Subgraph -  Load the schema field list from a graphql endpoint. The field list loaded defaults to the ‘Query’ schema.</p></li>
-<li><p>Define Query Path - Streamer allows you to define a query path and queue up multiple queries of different parts of the schema at once.</p></li>
-<li><p>The query path is defined automatically to run every possible query on the subgraph and returns a list of dataframes.</p></li>
-</ol>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.endpoint">
 <span class="sig-name descname"><span class="pre">endpoint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#datastreams.streamer.Streamer.endpoint" title="Permalink to this definition"></a></dt>
@@ -194,7 +186,8 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.getFieldPath">
 <span class="sig-name descname"><span class="pre">getFieldPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Query'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getFieldPath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getFieldPath" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>getFieldPath converts a string to a FieldPath object. In a Subgrounds query, the format follows subgrounds.schema.FieldPath.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>field</strong> (<em>str</em>) – Enter the string that will be converted to a FieldPath</p></li>
@@ -208,13 +201,13 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dd class="field-odd"><p><em>FieldPath</em></p>
 </dd>
 </dl>
-<p>getFieldPath converts a string to a FieldPath object. In a Subgrounds query, the format follows subgrounds.schema.FieldPath.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.getSubgraphSchema">
 <span class="sig-name descname"><span class="pre">getSubgraphSchema</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSubgraphSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSubgraphSchema" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>getSubgraphSchema gets the schema list from a Subgraph.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>schema list from a Subgraph</p>
 </dd>
@@ -222,13 +215,13 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dd class="field-even"><p>list[str]</p>
 </dd>
 </dl>
-<p>getSubgraphSchema gets the schema list from a Subgraph.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.getSchemaFields">
 <span class="sig-name descname"><span class="pre">getSchemaFields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getSchemaFields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getSchemaFields" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>getSubgraphField gets a fields list from a subgraph schema.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>schema_object</strong> (<em>str</em>) – Schema object name to get fields list from</p></li>
@@ -242,13 +235,13 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dd class="field-odd"><p>list[str]</p>
 </dd>
 </dl>
-<p>getSubgraphField gets a fields list from a subgraph schema.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.getQueryFields">
 <span class="sig-name descname"><span class="pre">getQueryFields</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getQueryFields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getQueryFields" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get all queryable fields from the subgraph schema.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>list[str] of queryable fields from the subgraph schema</p>
 </dd>
@@ -256,52 +249,53 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dd class="field-even"><p>list[str]</p>
 </dd>
 </dl>
-<p>Get all queryable fields from the subgraph schema.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.filterQueryFieldStrs">
 <span class="sig-name descname"><span class="pre">filterQueryFieldStrs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.filterQueryFieldStrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.filterQueryFieldStrs" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>filterQueryFieldStrs() is an inner helper function run at startup that stores a str representation of the queryable fields.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>list[str] of queryable fields that end with an ‘s’</p>
+<dd class="field-odd"><p>list[str] of queryable fields</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>list[str]</p>
 </dd>
 </dl>
-<p>Filter fields that end with an ‘s’</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.filterQueryFields">
 <span class="sig-name descname"><span class="pre">filterQueryFields</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.filterQueryFields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.filterQueryFields" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>filterQueryFields() is an inner helper function run at startup that stores a FieldPath representation of the queryable fields.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>list[FieldPath] of queryable fields that end with an ‘s’</p>
+<dd class="field-odd"><p>list[FieldPath] of queryable fields</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>list[subgrounds.subgraph.fieldpath.FieldPath]</p>
 </dd>
 </dl>
-<p>Filter fields that end with an ‘s’</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.getQueryDict">
 <span class="sig-name descname"><span class="pre">getQueryDict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.getQueryDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.getQueryDict" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>getQueryDict() is an inner helper function run at startup that stores a dictionary of queryable fields in {str: FieldPath} format. 
+This function allows the subgraph schema to be searchable by dictionary keys.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>dict of queryable fields that end with an ‘s’</p>
+<dd class="field-odd"><p>dict of queryable fields in {str: FieldPath} format</p>
 </dd>
 </dl>
-<p>Filter fields that end with an ‘s’</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.addSearchParam">
 <span class="sig-name descname"><span class="pre">addSearchParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_Direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'desc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.addSearchParam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.addSearchParam" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>addSearchParam() adds an optional search parameter to a Subgraph query.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>query_field</strong> (<em>FieldPath</em>) – FieldPath object</p></li>
@@ -317,13 +311,13 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dd class="field-odd"><p><em>FieldPath</em></p>
 </dd>
 </dl>
-<p>addSearchParam() is a helper function that adds a search parameter to a query.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.runQuery">
 <span class="sig-name descname"><span class="pre">runQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.runQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.runQuery" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>setupQuery() returns a DataFrame object from a Subgraph query.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>query_field</strong> (<em>FieldPath</em>) – FieldPath object</p></li>
@@ -338,26 +332,28 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dd class="field-odd"><p><em>DataFrame</em></p>
 </dd>
 </dl>
-<p>setupQuery() is a helper function that returns a DataFrame object for a query.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.runSameQuerySearch">
 <span class="sig-name descname"><span class="pre">runSameQuerySearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fieldParam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searchKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searchVals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.runSameQuerySearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.runSameQuerySearch" title="Permalink to this definition"></a></dt>
-<dd><p>runSameQuerySearch() is a helper function that allows a user to search for multiple values for the same query field.</p>
+<dd><p>runSameQuerySearch() allows a user to search for multiple values within the same query field schema.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fieldParam</strong> (<em>FieldPath</em>) – </p></li>
-<li><p><strong>keys</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – </p></li>
-<li><p><strong>values</strong> (<em>list</em>) – </p></li>
-<li><p><strong>searchKey</strong> (<em>str</em>) – </p></li>
-<li><p><strong>searchVals</strong> (<em>list</em>) – </p></li>
-<li><p><strong>query_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>fieldParam</strong> (<em>FieldPath</em>) – FieldPath object</p></li>
+<li><p><strong>keys</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – list of keys to search</p></li>
+<li><p><strong>values</strong> (<em>list</em>) – list of values to search</p></li>
+<li><p><strong>searchKey</strong> (<em>str</em>) – key to search for</p></li>
+<li><p><strong>searchVals</strong> (<em>list</em>) – list of values to search for</p></li>
+<li><p><strong>query_size</strong> (<em>int</em>) – number of query results to return. Default is 10.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[pandas.core.frame.DataFrame]</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list[DataFrame] object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[pandas.core.frame.DataFrame]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -369,17 +365,20 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fieldParam</strong> (<em>FieldPath</em>) – </p></li>
-<li><p><strong>keys</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – </p></li>
-<li><p><strong>values</strong> (<em>list</em>) – </p></li>
-<li><p><strong>searchKey</strong> (<em>str</em>) – </p></li>
-<li><p><strong>searchVals</strong> (<em>list</em>) – </p></li>
-<li><p><strong>cores</strong> (<em>int</em>) – </p></li>
-<li><p><strong>query_size</strong> (<em>int</em>) – </p></li>
+<li><p><strong>fieldParam</strong> (<em>FieldPath</em>) – FieldPath object</p></li>
+<li><p><strong>keys</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – list of keys to search</p></li>
+<li><p><strong>values</strong> (<em>list</em>) – list of values to search</p></li>
+<li><p><strong>searchKey</strong> (<em>str</em>) – key to search for</p></li>
+<li><p><strong>searchVals</strong> (<em>list</em>) – list of values to search for</p></li>
+<li><p><strong>cores</strong> (<em>int</em>) – number of cores to use for parallelization. Default is 4.</p></li>
+<li><p><strong>query_size</strong> (<em>int</em>) – number of query results to return. Default is 10.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[pandas.core.frame.DataFrame]</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list[DataFrame] object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[pandas.core.frame.DataFrame]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -387,12 +386,14 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.runStreamerLoop">
 <span class="sig-name descname"><span class="pre">runStreamerLoop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_field_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.runStreamerLoop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.runStreamerLoop" title="Permalink to this definition"></a></dt>
-<dd><p><em>SOFT DEPRECATION</em> - use runStreamerLoopParallel() instead. This function is left in for legacy purposes.</p>
+<dd><p><em>SOFT DEPRECATION</em> - use runStreamerLoopParallel() instead. This function is left in for legacy purposes.
+runStreamer() runs through a list of queryable fields list and returns a list of Subgraph query dataframes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>query_field_list</strong> (<em>list</em><em>[</em><em>FieldPath</em><em>]</em>) – list of FieldPath objects</p></li>
 <li><p><strong>query_size</strong> (<em>int</em>) – number of query results to return. Default is 10.</p></li>
-<li><p><strong>query_field_list</strong> (<em>list</em><em>[</em><em>subgrounds.subgraph.fieldpath.FieldPath</em><em>]</em>) – </p></li>
+<li><p><strong>where</strong> (<em>dict</em>) – where is a dictionary conditional that specifies query searches. Default is None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -402,13 +403,14 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dd class="field-odd"><p>list[pandas.core.frame.DataFrame]</p>
 </dd>
 </dl>
-<p>runStreamer() runs through ALL queryable fields list and returns a list of query dataframes.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datastreams.streamer.Streamer.runStreamerLoopParallel">
 <span class="sig-name descname"><span class="pre">runStreamerLoopParallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/datastreams/streamer.html#Streamer.runStreamerLoopParallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.streamer.Streamer.runStreamerLoopParallel" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>runStreamerLoopParallel() runs through a list of queryable fields and returns a list of Subgraph query dataframes.</p>
+<p>NOTE - This function does not support parallelized search filter queries.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>query_list</strong> (<em>list</em><em>[</em><em>FieldPath</em><em>]</em>) – list of FieldPath objects</p></li>
@@ -423,7 +425,6 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dd class="field-odd"><p>list[pandas.core.frame.DataFrame]</p>
 </dd>
 </dl>
-<p>runStreamer() runs through ALL queryable fields list and returns a list of query dataframes.</p>
 </dd></dl>
 
 </dd></dl>
@@ -435,7 +436,8 @@ Since this is needed before doing anything with Subgrounds, this is done automat
 <dt class="sig sig-object py" id="datastreams.datastream.DataStream">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datastreams.datastream.</span></span><span class="sig-name descname"><span class="pre">DataStream</span></span><a class="reference internal" href="_modules/datastreams/datastream.html#DataStream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#datastreams.datastream.DataStream" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Use DataStream to interface with the Streamer class. Future direction of the class is undecided. 
+<p>** CURRENTLY BEING BUILT. NOT USABLE YET **
+Use DataStream to interface with the Streamer class. Future direction of the class is undecided. 
 The only benefit is abstracting away the execution layer from Streamer class.</p>
 <p>Tentatively DataStream should store execution functionality whereas Streamer will store
 the subgraph interface functionality.</p>
