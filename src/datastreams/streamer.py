@@ -2,9 +2,12 @@ import concurrent.futures
 import time
 
 from dataclasses import dataclass
+
+from subgrounds.pagination.pagination import PaginationError
 from subgrounds.subgraph.subgraph import Subgraph
 from subgrounds.subgrounds import Subgrounds
 from subgrounds.subgraph.fieldpath import FieldPath
+
 
 from pandas import DataFrame
 
@@ -38,13 +41,16 @@ class Streamer:
     data: list = None
     schema: list = None
     queryFields: list = None
-    queryStrs: list[str] = None
+    queryStrs: list[str] = None 
+    queryDict: dict = None
     
     def __post_init__(self):
     # Perform startup tasks here
         self.setupStreamer()
         self.schema = self.getSubgraphSchema()
+        self.queryStrs = self.filterQueryFieldStrs()
         self.queryFields = self.filterQueryFields()
+        self.queryDict = self.getQueryDict()
 
     def setupStreamer(self):
         """
@@ -97,36 +103,42 @@ class Streamer:
 
         return query_field_paths
 
-    def filterQueryFields(self) -> list[FieldPath]:
+    def filterQueryFieldStrs(self) -> list[str]:
         """
-        :return: list[FieldPath] of queryable fields that end with an 's'
+        :return: list[str] of queryable fields that end with an 's'
 
         Filter fields that end with an 's'
         """
-
         # get query field list
         query_field_paths = self.getQueryFields()
 
         filtered_query_field_paths = [field for field in query_field_paths if field.endswith('s')]
 
         # filter out None values
-        filtered_query_field_paths = list(filter(None, filtered_query_field_paths))
+        filtered_field_paths_str = list(filter(None, filtered_query_field_paths))
 
-        self.queryStrs = filtered_query_field_paths
+        return filtered_field_paths_str
 
+    def filterQueryFields(self) -> list[FieldPath]:
+        """
+        :return: list[FieldPath] of queryable fields that end with an 's'
+
+        Filter fields that end with an 's'
+        """
         # convert str -> FieldPath
-        filtered_query_field_paths = [self.getFieldPath(field) for field in filtered_query_field_paths]
-        return filtered_query_field_paths
+        filtered_field_paths= [self.getFieldPath(field) for field in self.queryStrs]
 
-    # def makeSearchParam(self, keys=list, values=list) -> dict:
-    #     """
-    #     :param list keys: list of keys
-    #     :param list values: list of values
-    #     :return: dictionary of keys and values
+        return filtered_field_paths
 
-    #     makeSearchParam() is a helper function that makes a search parameter dictionary.
-    #     """
-    #     return dict(zip(keys, values))
+    def getQueryDict(self):
+        """
+        :return: dict of queryable fields that end with an 's'
+
+        Filter fields that end with an 's'
+        """
+        query_dict = dict(zip(self.queryStrs, self.queryFields))
+
+        return query_dict
         
     def addSearchParam(self, query_field: FieldPath, search_param: dict, query_size = 10, order_Direction: str ='desc') -> FieldPath:
         """
@@ -211,7 +223,7 @@ class Streamer:
 
 
         
-    def runStreamerLoop(self, query_size: int = 10, where=None) -> list[DataFrame]:
+    def runStreamerLoop(self, query_field_list: list[FieldPath], query_size: int = 10, where=None) -> list[DataFrame]:
         """
         *SOFT DEPRECATION* - use runStreamerLoopParallel() instead. This function is left in for legacy purposes.
 
@@ -225,13 +237,17 @@ class Streamer:
 
         #start time
         start_time = time.time()
-        for i in range(len(self.queryFields)):
-            df = self.runQuery(self.queryFields[i], query_size)
-            df_data.append(df)
+        for i in range(len(query_field_list)):
+            try:
+                df = self.runQuery(query_field_list[i], query_size)
+                df_data.append(df)
+            except PaginationError as e:
+                print(f'Caught error: {e} with queryField: {query_field_list[i]}. Moving on anyways...')
+                pass
         # end time
         end_time = time.time() - start_time
         
-        print(f'{len(self.queryFields)} queries, single core: {end_time:.2f} seconds. Largest df is {len(max(df_data, key=len))}\n')
+        print(f'{len(query_field_list)} queries, single core: {end_time:.2f} seconds. Largest df is {len(max(df_data, key=len))}\n')
         return df_data
 
     def runStreamerLoopParallel(self, query_list: list[FieldPath], query_size: int = 10, cores: int = 4) -> list[DataFrame]:
@@ -252,9 +268,12 @@ class Streamer:
         with concurrent.futures.ThreadPoolExecutor(max_workers=cores) as executor:
             # Calculate the square of each number in parallel
             for args in query_list:
-                future = executor.submit(self.runQuery, *args)
-                df_data.append(future.result())
-
+                try:
+                    future = executor.submit(self.runQuery, *args)
+                    df_data.append(future.result())
+                except PaginationError as e:
+                    print(f'Caught error: {e} with args: {args}. Moving on anyways...')
+                    pass
         end_time = time.time() - start_time
         print(f'{len(self.queryFields)} queries, parallelized 4 cores: {end_time:.2f} seconds. Largest df is {len(max(df_data, key=len))}\n')
 

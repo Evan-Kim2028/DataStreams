@@ -33,7 +33,7 @@ print(f'\nTHE ENDPOINT IS {subgraph_name}\n')
 
 print(f'Parallel Streamer Loop')
 query_list = ds.queryFields
-ds.runStreamerLoopParallel(query_list=query_list, query_size=13)
+ds.runStreamerLoopParallel(query_list=query_list, query_size=5)
 
 # conver queryFields list to a list of strings
 # query_list = [str(field) for field in ds.queryFields]
