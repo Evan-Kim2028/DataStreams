@@ -157,11 +157,14 @@ class Streamer:
         print(f'FIELD - {query_field}')
         if where == None:
             df = self.sub.query_df(query_field(first=query_size))
+            # add endpoint column to df
+            df['endpoint'] = self.endpoint
             return df
         else:
             print(f'Filter based on these values: {where}')
             query_field = self.addSearchParam(query_field, where, query_size=query_size) # add where condition to query_field
             df = self.sub.query_df(query_field)
+            df['endpoint'] = self.endpoint
             return df
 
     def runSameQuerySearch(self, fieldParam: FieldPath, keys: list[str], values: list, searchKey: str, searchVals: list, query_size: int = 10) -> list[DataFrame]:
