@@ -55,6 +55,33 @@ class Streamer:
         self.data = []
         self.schema = []
 
+    def filterQueryFieldStrs(self) -> list[str]:
+        """
+        filterQueryFieldStrs() is an inner helper function run at startup that stores a str representation of the queryable fields.
+
+        :return: list[str] of queryable fields
+        """
+        # get query field list
+        query_field_paths = self.getQueryFields()
+
+        filtered_query_field_paths = [field for field in query_field_paths if field.endswith('s')]
+
+        # filter out None values
+        filtered_field_paths_str = list(filter(None, filtered_query_field_paths))
+
+        return filtered_field_paths_str
+
+    def filterQueryFields(self) -> list[FieldPath]:
+        """
+        filterQueryFields() is an inner helper function run at startup that stores a FieldPath representation of the queryable fields.
+
+        :return: list[FieldPath] of queryable fields
+        """
+        # convert str -> FieldPath
+        filtered_field_paths= [self.getFieldPath(field) for field in self.queryStrs]
+
+        return filtered_field_paths
+    
     def getFieldPath(self, field: str,  operation: str ='Query') -> FieldPath:
         """
         getFieldPath converts a string to a FieldPath object. In a Subgrounds query, the format follows subgrounds.schema.FieldPath.
@@ -94,33 +121,6 @@ class Streamer:
 
         return query_field_paths
 
-    def filterQueryFieldStrs(self) -> list[str]:
-        """
-        filterQueryFieldStrs() is an inner helper function run at startup that stores a str representation of the queryable fields.
-
-        :return: list[str] of queryable fields
-        """
-        # get query field list
-        query_field_paths = self.getQueryFields()
-
-        filtered_query_field_paths = [field for field in query_field_paths if field.endswith('s')]
-
-        # filter out None values
-        filtered_field_paths_str = list(filter(None, filtered_query_field_paths))
-
-        return filtered_field_paths_str
-
-    def filterQueryFields(self) -> list[FieldPath]:
-        """
-        filterQueryFields() is an inner helper function run at startup that stores a FieldPath representation of the queryable fields.
-
-        :return: list[FieldPath] of queryable fields
-        """
-        # convert str -> FieldPath
-        filtered_field_paths= [self.getFieldPath(field) for field in self.queryStrs]
-
-        return filtered_field_paths
-
     def getQueryDict(self):
         """
         getQueryDict() is an inner helper function run at startup that stores a dictionary of queryable fields in {str: FieldPath} format. 
@@ -132,6 +132,37 @@ class Streamer:
 
         return query_dict
         
+    def getFieldPathQueryCols(self, fieldpath: FieldPath) -> list[str]:
+        """
+        getFieldPathQueryCols() returns a list of columns available to query.
+
+        :param FieldPath fieldpath: FieldPath object
+        :return: list[str] of queryable fields
+        """
+
+        col_query_list = list(fieldpath.__dict__.keys())
+        # remove string values that start with _
+        col_query_list = [col for col in col_query_list if not col.startswith('_')]
+        return col_query_list
+    
+    def getQueryCols(self, fieldpath: FieldPath, col_query_list: list[str]) -> dict:
+        """
+        getQueryCols() converts a query column list to a dictionary object. The
+        dictionary keys are the string names of the fieldpath query columns. The 
+        dictionary values are the fieldpath values that correpsond to the key string names.
+
+        :param FieldPath fieldpath: FieldPath object
+        :param list[str] col_query_list: list of columns to query within a FieldPath schema object
+        """
+        # empty dictionary
+        query_cols = {}
+
+        # loop through query columns and add to dictionary
+        for col in col_query_list:
+            query_cols[col] = fieldpath._select(col)
+
+        return query_cols
+
     def addSearchParam(self, query_field: FieldPath, search_param: dict, query_size = 10, order_Direction: str ='desc') -> FieldPath:
         """
         addSearchParam() adds an optional search parameter to a Subgraph query.
