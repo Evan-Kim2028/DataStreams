@@ -56,4 +56,3 @@ MANIFEST
 .python-version
 /ds*
 examples/cow_grant_streamer.ipynb
-/old*
