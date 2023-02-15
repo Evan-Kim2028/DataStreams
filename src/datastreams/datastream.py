@@ -16,9 +16,6 @@ class DataStream:
     streamerDict: dict = None
 
     def __post_init__(self):
-        # generate Streamer names
-        # generate Streamer objects
-        # combine into dictionary
         self.makeStreamerDict()
 
     def makeStreamerDict(self):
@@ -49,34 +46,32 @@ class DataStream:
         return common_keys
 
 
-    def querySubgraphs(self, streamer_dict: dict, query_field: str, query_size: int = 7) -> list[DataFrame]:
+    def querySubgraphs(self, streamer_dict: dict, query_field: str) -> list[DataFrame]:
         """
         query all Subgraphs in a streamer dictionary for a specific query field
 
         :param dict streamer_dict: dictionary of Streamer objects
         :param str query_field: query field to run
-        :param int query_size: number of queries to run. Default is 7.
         """
         data = []
-        #run token query on streamer objects
+        #run query on streamer objects
         for ds in streamer_dict.values():
             print(f'querying {ds.endpoint} for {query_field}...')
-            # token query
-            tokens_df = ds.runQuery(ds.queryDict[query_field], query_size=query_size)
+            # 2.15.23 TODO - construct new query fieldpath here?
+
+            # run batch queries
+            tokens_df = ds.runQuery(ds.queryDict[query_field])
             data.append(tokens_df)
         return data
 
 
 
     # # Subgrounds is unique for every DataStream?
-    # def getDataStream(self, endpoint: str, query_size = 5):
+    # def getDataStream(self, endpoint: str):
     #     """
     #     :param str endpoint: graphql endpoint
-    #     :param int query_size: number of queries to run. Default is 5.
-
 
     #     getDataStream is a firehose that returns all data from a subgraph endpoint.
-    #     Should query_size, a graphQl parameter be contained in this function? Or moved somewhere else
     #     """
     #     # create new Subgrounds object
     #     sub = Subgrounds()

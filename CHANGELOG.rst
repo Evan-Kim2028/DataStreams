@@ -2,7 +2,13 @@
 Changelog
 =========
 
-Version 0.1
+Version 1.1.0
+===========
+
+- Simplify run_query by removing query_size parameter. Note that this breaks existing queries that used v1.0.0
+- Remove parallelization queries. Requires a redesign.
+
+Version 1.0.0
 ===========
 
 - Added test_streamer.py to test the streamer class functionality
