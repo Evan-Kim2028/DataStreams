@@ -133,6 +133,40 @@ class Streamer:
         return query_dict
         
     def getFieldPathQueryCols(self, fieldpath: FieldPath) -> list[str]:
+<<<<<<< HEAD
+=======
+        """
+        getFieldPathQueryCols() returns a list of columns available to query.
+
+        :param FieldPath fieldpath: FieldPath object
+        :return: list[str] of queryable fields
+        """
+
+        col_query_list = list(fieldpath.__dict__.keys())
+        # remove string values that start with _
+        col_query_list = [col for col in col_query_list if not col.startswith('_')]
+        return col_query_list
+    
+    def getQueryCols(self, fieldpath: FieldPath, col_query_list: list[str]) -> dict:
+        """
+        getQueryCols() converts a query column list to a dictionary object. The
+        dictionary keys are the string names of the fieldpath query columns. The 
+        dictionary values are the fieldpath values that correpsond to the key string names.
+
+        :param FieldPath fieldpath: FieldPath object
+        :param list[str] col_query_list: list of columns to query within a FieldPath schema object
+        """
+        # empty dictionary
+        query_cols = {}
+
+        # loop through query columns and add to dictionary
+        for col in col_query_list:
+            query_cols[col] = fieldpath._select(col)
+
+        return query_cols
+
+    def addSearchParam(self, query_field: FieldPath, search_param: dict, query_size = 10, order_Direction: str ='desc') -> FieldPath:
+>>>>>>> origin/master
         """
         getFieldPathQueryCols() returns a list of columns available to query.
 
