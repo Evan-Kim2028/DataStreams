@@ -133,8 +133,6 @@ class Streamer:
         return query_dict
         
     def getFieldPathQueryCols(self, fieldpath: FieldPath) -> list[str]:
-<<<<<<< HEAD
-=======
         """
         getFieldPathQueryCols() returns a list of columns available to query.
 
@@ -165,8 +163,8 @@ class Streamer:
 
         return query_cols
 
-    def addSearchParam(self, query_field: FieldPath, search_param: dict, query_size = 10, order_Direction: str ='desc') -> FieldPath:
->>>>>>> origin/master
+
+    def runQuery(self, query_field: FieldPath) -> DataFrame:
         """
         getFieldPathQueryCols() returns a list of columns available to query.
 
