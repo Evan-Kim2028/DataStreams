@@ -55,4 +55,5 @@ MANIFEST
 .conda*/
 .python-version
 /ds*
-examples/cow_grant_streamer.ipynb
+/examples/cow_uni_chain_playgrounds/*.parquet
+/examples/cow_uni_chain_playgrounds/*ipynb_checkpoints
