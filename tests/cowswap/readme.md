@@ -1,1 +1,0 @@
-This folder supports unit tests for the CowSwap subgraphs similar to the GraphiQL explorer. Tests are completed with both Subgrounds and DataStreams to create replicatable results.
