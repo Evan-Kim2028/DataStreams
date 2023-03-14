@@ -58,3 +58,4 @@ MANIFEST
 /.venv
 /examples/cow_uni_chain_playgrounds/*.parquet
 /examples/cow_uni_chain_playgrounds/*ipynb_checkpoints
+copy_*
