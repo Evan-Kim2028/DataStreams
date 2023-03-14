@@ -54,6 +54,7 @@ MANIFEST
 .venv*/
 .conda*/
 .python-version
-/ds*
+/env*
+/.venv
 /examples/cow_uni_chain_playgrounds/*.parquet
 /examples/cow_uni_chain_playgrounds/*ipynb_checkpoints
